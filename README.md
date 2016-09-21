@@ -11,6 +11,4 @@ What is Gob?
  - - -
 ```
 
-# 
-\
 ![](http://i.imgur.com/OaaMzYF.gif)
