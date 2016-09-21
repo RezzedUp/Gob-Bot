@@ -7,8 +7,8 @@ import sx.blah.discord.handle.obj.IMessage;
 public class CleverBotCommand extends Command
 {
     public CleverBotCommand(IDiscordClient client)
-    {
-        super(client, new String[]{"clever", ":cl:"});
+    {                                                   // :cl:            :robot:
+        super(client, new String[]{"clever", "cleverbot", "\uD83C\uDD91", "\uD83E\uDD16"});
     }
     
     @Override

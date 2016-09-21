@@ -2,6 +2,8 @@ package com.rezzedup.gob;
 
 import com.rezzedup.gob.command.CommandParser;
 import com.rezzedup.gob.command.usable.HelpCommand;
+
+import com.rezzedup.gob.command.usable.YouTemporaryCommand;
 import sx.blah.discord.api.ClientBuilder;
 import sx.blah.discord.api.IDiscordClient;
 import sx.blah.discord.util.DiscordException;
@@ -43,6 +45,7 @@ public class Gob
         CommandParser parser = new CommandListener(client).getCommandParser();
         
         parser.register(new HelpCommand(client, parser));
+        parser.register(new YouTemporaryCommand(client));
     }
     
     public static void status(String message)

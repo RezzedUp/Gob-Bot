@@ -10,3 +10,7 @@ What is Gob?
  Gob is a bot for discord. That's it.
  - - -
 ```
+
+# 
+\
+![](http://i.imgur.com/OaaMzYF.gif)
