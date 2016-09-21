@@ -6,7 +6,9 @@ import com.rezzedup.gob.util.Text;
 import sx.blah.discord.api.IDiscordClient;
 import sx.blah.discord.api.events.EventSubscriber;
 import sx.blah.discord.handle.impl.events.MessageReceivedEvent;
+import sx.blah.discord.handle.obj.IChannel;
 import sx.blah.discord.handle.obj.IMessage;
+import sx.blah.discord.handle.obj.IUser;
 import sx.blah.discord.util.DiscordException;
 
 public class CommandListener
@@ -71,12 +73,14 @@ public class CommandListener
     private void command(String content, IMessage message)
     {
         String command = Text.stripWhitespace(content);
+        IUser user = message.getAuthor();
+        IChannel channel = message.getChannel();
         
         Gob.status(String.format
         (
-            "User %s in (%s)#%s sent: %s", message.getAuthor().getName(), 
-            ((message.getChannel().isPrivate()) ? "<PM>" : message.getGuild().getName()),
-            message.getChannel().getName(), command
+            "%s#%s in (%s)#%s sent: %s", user.getName(), user.getDiscriminator(),
+            ((channel.isPrivate()) ? "<PM>" : message.getGuild().getName()),
+            channel.getName(), command
         ));
         
         parser.parse(command, message).execute();

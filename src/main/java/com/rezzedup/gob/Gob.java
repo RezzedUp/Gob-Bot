@@ -6,6 +6,8 @@ import com.rezzedup.gob.command.usable.HelpCommand;
 import com.rezzedup.gob.command.usable.InfoCommand;
 import sx.blah.discord.api.ClientBuilder;
 import sx.blah.discord.api.IDiscordClient;
+import sx.blah.discord.api.events.EventSubscriber;
+import sx.blah.discord.handle.impl.events.ReadyEvent;
 import sx.blah.discord.util.DiscordException;
 
 import java.time.LocalDateTime;
@@ -33,6 +35,7 @@ public class Gob
         try
         {
             builder.withToken(args[0]);
+            
             client = builder.login();
         }
         catch (DiscordException e)
@@ -41,6 +44,8 @@ public class Gob
             e.printStackTrace();
             return;
         }
+        
+        client.getDispatcher().registerListener(new Gob());
     
         CommandParser parser = new CommandListener(client).getCommandParser();
         
@@ -51,6 +56,12 @@ public class Gob
     public static void status(String message)
     {
         String time = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss a"));
-        System.out.println(String.format("[%s] %s", time, message));
+        System.out.println(String.format("[%s]: %s", time, message));
+    }
+    
+    @EventSubscriber
+    public void onStart(ReadyEvent event)
+    {
+        status("\n\n\n\n --- Gob --- \n Ready to go! \n\n\n");
     }
 }
