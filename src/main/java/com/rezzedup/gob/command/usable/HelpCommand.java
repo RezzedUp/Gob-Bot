@@ -11,8 +11,8 @@ public class HelpCommand extends Command
     private final CommandParser parser;
     
     public HelpCommand(IDiscordClient client, CommandParser parser)
-    {
-        super(client, new String[]{"help", "?", ":question:"});
+    {                                        // :question:
+        super(client, new String[]{"help", "?", "\u2753"});
         this.parser = parser;
     }
     
@@ -29,7 +29,5 @@ public class HelpCommand extends Command
         {
             e.printStackTrace();
         }
-        
-        //client.getGuildByID(message.getGuild().getID()).getChannelByID(message.getChannel().getID())
     }
 }

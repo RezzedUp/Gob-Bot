@@ -11,7 +11,11 @@ import java.time.format.DateTimeFormatter;
 
 public class Gob
 {
-    public static final String[] IDENTIFIERS = {":japanese_goblin:", ":gob", "gob"};
+    public static final String[] IDENTIFIERS = 
+    {
+        // :japanese_gobline:
+        "\uD83D\uDC7A", ":gob:", ":gob", "gob:", "gob"
+    };
     
     public static void main(String[] args)
     {

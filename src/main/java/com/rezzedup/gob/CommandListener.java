@@ -33,6 +33,8 @@ public class CommandListener
         IMessage message = event.getMessage();
         String msg = message.getContent();
         
+        //Gob.status(String.format("Recieved \"%s\" from %s in %s", msg, message.getAuthor().getName(), message.getChannel().getName()));
+        
         try
         {
             if (message.getAuthor().getID().equalsIgnoreCase(client.getApplicationClientID()))
@@ -48,6 +50,11 @@ public class CommandListener
         
         for (String identifier : Gob.IDENTIFIERS)
         {
+            if (identifier.length() >= msg.length())
+            {
+                continue;
+            }
+            
             if (msg.substring(0, identifier.length()).equalsIgnoreCase(identifier))
             {
                 String command = msg.substring(identifier.length());
