@@ -8,8 +8,6 @@ import java.util.Date;
 
 public class Gob
 {
-    private static ClientBuilder client = null;
-    
     public static void main(String[] args)
     {
         if (args.length <= 0)
@@ -31,6 +29,8 @@ public class Gob
             e.printStackTrace();
             return;
         }
+        
+        
     }
     
     public static void status(String message)
