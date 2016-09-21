@@ -14,24 +14,16 @@ public class UnknownCommandExecutor implements Executable
     @Override
     public void execute()
     {
-        String send;
-        
         if (message.getChannel().isPrivate())
         {
-            send = "I don't understand that command. \uD83D\uDE22";
-        }
-        else
-        {
-            send = "I'm not sure what that means " + message.getAuthor().mention();
-        }
-    
-        try
-        {
-            message.getChannel().sendMessage(send);
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
+            try
+            {
+                message.getChannel().sendMessage("I don't understand that command. \uD83D\uDE22");
+            }
+            catch (Exception e)
+            {
+                e.printStackTrace();
+            }
         }
     }
 }

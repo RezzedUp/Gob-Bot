@@ -3,6 +3,7 @@ package com.rezzedup.gob.command.usable;
 import com.rezzedup.gob.command.Command;
 import com.rezzedup.gob.command.CommandParser;
 
+import com.rezzedup.gob.util.Text;
 import sx.blah.discord.api.IDiscordClient;
 import sx.blah.discord.handle.obj.IChannel;
 import sx.blah.discord.handle.obj.IMessage;
@@ -29,13 +30,10 @@ public class HelpCommand extends Command
         IChannel channel = message.getChannel();
         List<String> msg = new ArrayList<>();
         
-        msg.add("Here's what I can do... \uD83D\uDC7A");
-        msg.add(" - - - ");
-        
         for (Command command : parser.getRegisteredCommands())
         {
             String[] aliases = command.getAliases();
-            String entry = " __" + aliases[0] + "__ - ";
+            String entry = "__" + aliases[0] + "__ - ";
             
             if (command.getDescrption().isEmpty())
             {
@@ -55,11 +53,9 @@ public class HelpCommand extends Command
             msg.add(entry);
         }
         
-        msg.add(" - - -");
-        
         try
         {
-            channel.sendMessage(String.join("\n", msg));
+            channel.sendMessage(Text.formattedResponse("Here's what I can do... \uD83D\uDC7A", msg));
         }
         catch (Exception e)
         {

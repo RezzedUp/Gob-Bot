@@ -3,7 +3,7 @@ package com.rezzedup.gob;
 import com.rezzedup.gob.command.CommandParser;
 import com.rezzedup.gob.command.usable.HelpCommand;
 
-import com.rezzedup.gob.command.usable.YouTemporaryCommand;
+import com.rezzedup.gob.command.usable.InfoCommand;
 import sx.blah.discord.api.ClientBuilder;
 import sx.blah.discord.api.IDiscordClient;
 import sx.blah.discord.util.DiscordException;
@@ -16,7 +16,7 @@ public class Gob
     public static final String[] IDENTIFIERS = 
     {
         // :japanese_gobline:
-        "\uD83D\uDC7A", ":gob:", ":gob", "gob:", "gob"
+        "\uD83D\uDC7A", ":gob:", ":gob", "gob:", "gob "
     };
     
     public static void main(String[] args)
@@ -45,7 +45,7 @@ public class Gob
         CommandParser parser = new CommandListener(client).getCommandParser();
         
         parser.register(new HelpCommand(client, parser));
-        parser.register(new YouTemporaryCommand(client));
+        parser.register(new InfoCommand(client));
     }
     
     public static void status(String message)

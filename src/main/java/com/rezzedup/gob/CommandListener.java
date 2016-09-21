@@ -33,8 +33,6 @@ public class CommandListener
         IMessage message = event.getMessage();
         String msg = message.getContent();
         
-        //Gob.status(String.format("Recieved \"%s\" from %s in %s", msg, message.getAuthor().getName(), message.getChannel().getName()));
-        
         try
         {
             if (message.getAuthor().getID().equalsIgnoreCase(client.getApplicationClientID()))
@@ -48,18 +46,39 @@ public class CommandListener
             return;
         }
         
-        for (String identifier : Gob.IDENTIFIERS)
+        if (!message.getChannel().isPrivate())
         {
-            if (identifier.length() >= msg.length())
+            for (String identifier : Gob.IDENTIFIERS)
             {
-                continue;
-            }
-            
-            if (msg.substring(0, identifier.length()).equalsIgnoreCase(identifier))
-            {
-                String command = msg.substring(identifier.length());
-                parser.parse(Text.stripWhitespace(command), message).execute();
+                if (identifier.length() >= msg.length())
+                {
+                    continue;
+                }
+        
+                if (msg.substring(0, identifier.length()).equalsIgnoreCase(identifier))
+                {
+                    command(msg.substring(identifier.length()), message);
+                    return;
+                }
             }
         }
+        else 
+        {
+            command(msg, message);
+        }
+    }
+    
+    private void command(String content, IMessage message)
+    {
+        String command = Text.stripWhitespace(content);
+        
+        Gob.status(String.format
+        (
+            "User %s in (%s)#%s sent: %s", message.getAuthor().getName(), 
+            ((message.getChannel().isPrivate()) ? "<PM>" : message.getGuild().getName()),
+            message.getChannel().getName(), command
+        ));
+        
+        parser.parse(command, message).execute();
     }
 }
