@@ -61,3 +61,13 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 *.lnk
+
+# IntelliJ project data
+.idea/
+*.iml
+*.ipr
+
+# Maven
+test/
+target/
+dependency-reduced-pom.xml
