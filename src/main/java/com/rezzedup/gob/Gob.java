@@ -1,13 +1,18 @@
 package com.rezzedup.gob;
 
+import com.rezzedup.gob.command.CommandParser;
+import com.rezzedup.gob.command.usable.HelpCommand;
 import sx.blah.discord.api.ClientBuilder;
 import sx.blah.discord.api.IDiscordClient;
 import sx.blah.discord.util.DiscordException;
 
-import java.util.Date;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class Gob
 {
+    public static final String[] IDENTIFIERS = {":japanese_goblin:", ":gob", "gob"};
+    
     public static void main(String[] args)
     {
         if (args.length <= 0)
@@ -16,12 +21,13 @@ public class Gob
             return;
         }
         
-        ClientBuilder client = new ClientBuilder();
-        client.withToken(args[0]);
-        
+        ClientBuilder builder = new ClientBuilder();
+        IDiscordClient client;
+    
         try
         {
-            client.login();
+            builder.withToken(args[0]);
+            client = builder.login();
         }
         catch (DiscordException e)
         {
@@ -29,12 +35,15 @@ public class Gob
             e.printStackTrace();
             return;
         }
+    
+        CommandParser parser = new CommandListener(client).getCommandParser();
         
-        
+        parser.register(new HelpCommand(client, parser));
     }
     
     public static void status(String message)
     {
-        System.out.println(new Date().toString() + message);
+        String time = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss a"));
+        System.out.println(String.format("[%s] %s", time, message));
     }
 }
