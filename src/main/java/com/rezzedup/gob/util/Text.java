@@ -1,5 +1,7 @@
 package com.rezzedup.gob.util;
 
+import sx.blah.discord.handle.obj.IMessage;
+
 import java.util.List;
 
 public class Text
@@ -29,5 +31,15 @@ public class Text
     public static String formattedResponse(String header, List<String> content)
     {
         return formattedResponse(header, String.join("\n ", content));
+    }
+    
+    public static String formatGuild(IMessage message)
+    {
+        return (message.getChannel().isPrivate()) ? "<PM>" : message.getGuild().getName();
+    }
+    
+    public static String formatGuildChannel(IMessage message)
+    {
+        return "(" + formatGuild(message) + ")#" + message.getChannel().getName();
     }
 }

@@ -2,8 +2,10 @@ package com.rezzedup.gob;
 
 import com.rezzedup.gob.command.CommandParser;
 import com.rezzedup.gob.command.usable.HelpCommand;
-
 import com.rezzedup.gob.command.usable.InfoCommand;
+import com.rezzedup.gob.command.usable.cleverbot.CleverBotCommand;
+
+import sx.blah.discord.Discord4J;
 import sx.blah.discord.api.ClientBuilder;
 import sx.blah.discord.api.IDiscordClient;
 import sx.blah.discord.api.events.EventSubscriber;
@@ -28,6 +30,8 @@ public class Gob
             status("Expected bot's authentication token as the first argument.");
             return;
         }
+    
+        Discord4J.disableChannelWarnings();
         
         ClientBuilder builder = new ClientBuilder();
         IDiscordClient client;
@@ -51,6 +55,7 @@ public class Gob
         
         parser.register(new HelpCommand(client, parser));
         parser.register(new InfoCommand(client));
+        parser.register(new CleverBotCommand(client));
     }
     
     public static void status(String message)

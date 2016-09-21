@@ -9,7 +9,6 @@ import sx.blah.discord.handle.impl.events.MessageReceivedEvent;
 import sx.blah.discord.handle.obj.IChannel;
 import sx.blah.discord.handle.obj.IMessage;
 import sx.blah.discord.handle.obj.IUser;
-import sx.blah.discord.util.DiscordException;
 
 public class CommandListener
 {
@@ -35,16 +34,8 @@ public class CommandListener
         IMessage message = event.getMessage();
         String msg = message.getContent();
         
-        try
+        if (avoidSelfInvoke(message))
         {
-            if (message.getAuthor().getID().equalsIgnoreCase(client.getApplicationClientID()))
-            {
-                return;
-            }
-        }
-        catch (DiscordException e)
-        {
-            e.printStackTrace();
             return;
         }
         
@@ -63,6 +54,13 @@ public class CommandListener
                     return;
                 }
             }
+    
+            String mention = "<@" + client.getOurUser().getID() + ">";
+            
+            if (msg.startsWith(mention))
+            {
+                command(msg.substring(mention.length()), message);
+            }
         }
         else 
         {
@@ -73,16 +71,24 @@ public class CommandListener
     private void command(String content, IMessage message)
     {
         String command = Text.stripWhitespace(content);
-        IUser user = message.getAuthor();
-        IChannel channel = message.getChannel();
         
+        log(message, command);
+        parser.parse(command, message).execute();
+    }
+    
+    private void log(IMessage message, String content)
+    {
+        IUser user = message.getAuthor();
+    
         Gob.status(String.format
         (
-            "%s#%s in (%s)#%s sent: %s", user.getName(), user.getDiscriminator(),
-            ((channel.isPrivate()) ? "<PM>" : message.getGuild().getName()),
-            channel.getName(), command
+            "%s#%s in %s sent: %s",
+            user.getName(), user.getDiscriminator(), Text.formatGuildChannel(message), content
         ));
-        
-        parser.parse(command, message).execute();
+    }
+    
+    private boolean avoidSelfInvoke(IMessage message)
+    {
+        return (message.getAuthor().getID().equalsIgnoreCase(client.getOurUser().getID()));
     }
 }
