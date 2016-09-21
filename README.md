@@ -2,5 +2,11 @@
 
 # Gob-Bot 
 
-:japanese_goblin:
+:japanese_goblin: `info`
 
+```
+What is Gob?
+ - - -
+ Gob is a bot for discord. That's it.
+ - - -
+```
