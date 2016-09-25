@@ -30,7 +30,7 @@ public class CleverBotSession
     
     public long minutesSinceLastUse()
     {
-        return TimeUnit.MILLISECONDS.toMinutes(lastUse.getTime() - creation.getTime());
+        return TimeUnit.MILLISECONDS.toMinutes(new Date().getTime() - lastUse.getTime());
     }
     
     public boolean isExpired()

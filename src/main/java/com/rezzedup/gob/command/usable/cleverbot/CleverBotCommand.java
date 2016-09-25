@@ -13,17 +13,31 @@ import sx.blah.discord.handle.obj.IMessage;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class CleverBotCommand extends Command
 {
-    // "Guild:Channel" -> Session TODO: clean up expired sessions with an hourly check
-    Map<String, CleverBotSession> sessions = new HashMap<>();
-    ChatterBotFactory factory = new ChatterBotFactory();
+    // "Guild:Channel" -> Session
+    private Map<String, CleverBotSession> sessions = new HashMap<>();
+    private ChatterBotFactory factory = new ChatterBotFactory();
+    private Timer timer = new Timer();
     
     public CleverBotCommand(IDiscordClient client)
     {                                                   // :cl:            :robot:
         super(client, new String[]{"clever", "cleverbot", "\uD83C\uDD91", "\uD83E\uDD16"});
         setDescrption("Have a conversation with CleverBot.");
+    
+        long hour = 1000*60*60;
+        TimerTask task = new TimerTask()
+        {
+            @Override
+            public void run()
+            {
+                removeExpiredSessions();
+            }
+        };
+        timer.schedule(task, hour, hour);
     }
     
     @Override
@@ -58,6 +72,17 @@ public class CleverBotCommand extends Command
         catch (Exception e)
         {
             e.printStackTrace();
+        }
+    }
+    
+    public void removeExpiredSessions()
+    {
+        for (String id : sessions.keySet())
+        {
+            if (sessions.get(id).isExpired())
+            {
+                sessions.remove(id);
+            }
         }
     }
 }
