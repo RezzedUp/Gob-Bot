@@ -11,7 +11,9 @@ import sx.blah.discord.api.IDiscordClient;
 import sx.blah.discord.handle.obj.IChannel;
 import sx.blah.discord.handle.obj.IMessage;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -77,12 +79,16 @@ public class CleverBotCommand extends Command
     
     public void removeExpiredSessions()
     {
+        List<String> remove = new ArrayList<>();
+        
         for (String id : sessions.keySet())
         {
             if (sessions.get(id).isExpired())
             {
-                sessions.remove(id);
+                remove.add(id);
             }
         }
+        
+        remove.forEach(id -> sessions.remove(id));
     }
 }
