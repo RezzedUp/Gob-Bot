@@ -25,16 +25,18 @@ public class MathCommand extends Command
     public void execute(String[] args, IMessage message)
     {
         IChannel channel = message.getChannel();
-        String expresssion = String.join(" ", args);
+        String expression = String.join(" ", args);
         String msg;
         
         try
         {
-            double result = evaluator.evaluate(expresssion);
+            double result = evaluator.evaluate(expression);
+            String answer = String.valueOf(result).replaceAll("[.]?0+$", "");
+            
             msg = Text.formattedCodeResponse
             (
                 "Solved it, " + message.getAuthor().mention() + "! " + Emoji.NERD, "",
-                String.format("%s = %s", expresssion, (result == (long) result) ? (long) result : result)
+                String.format("%s = %s", expression, answer)
             );
         }
         catch (IllegalArgumentException e)

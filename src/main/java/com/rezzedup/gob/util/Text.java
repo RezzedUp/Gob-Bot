@@ -40,12 +40,12 @@ public class Text
     
     public static String formattedCodeResponse(String header, String language, String... content)
     {
-        return formattedCodeResponse(header, language, String.join("\n ", content));
+        return formattedCodeResponse(header, language, String.join("\n", content));
     }
     
     public static String formattedCodeResponse(String header, String language, List<String> content)
     {
-        return formattedCodeResponse(header, language, String.join("\n ", content));
+        return formattedCodeResponse(header, language, String.join("\n", content));
     }
     
     public static String formatGuild(IMessage message)
