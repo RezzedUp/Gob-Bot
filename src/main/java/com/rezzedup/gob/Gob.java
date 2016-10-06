@@ -3,7 +3,8 @@ package com.rezzedup.gob;
 import com.rezzedup.gob.command.CommandParser;
 import com.rezzedup.gob.command.usable.HelpCommand;
 import com.rezzedup.gob.command.usable.InfoCommand;
-import com.rezzedup.gob.command.usable.cleverbot.CleverBotCommand;
+import com.rezzedup.gob.command.usable.MathCommand;
+import com.rezzedup.gob.command.usable.CleverBotCommand;
 
 import sx.blah.discord.Discord4J;
 import sx.blah.discord.api.ClientBuilder;
@@ -19,8 +20,7 @@ public class Gob
 {
     public static final String[] IDENTIFIERS = 
     {
-        // :japanese_gobline:
-        "\uD83D\uDC7A", ":gob:", ":gob", "gob:", "gob "
+        Emoji.JAPANESE_GOBLIN.toString(), ":gob:", ":gob", "gob:", "gob "
     };
     
     public static void main(String[] args)
@@ -56,6 +56,7 @@ public class Gob
         parser.register(new HelpCommand(client, parser));
         parser.register(new InfoCommand(client));
         parser.register(new CleverBotCommand(client));
+        parser.register(new MathCommand(client));
     }
     
     public static void status(String message)

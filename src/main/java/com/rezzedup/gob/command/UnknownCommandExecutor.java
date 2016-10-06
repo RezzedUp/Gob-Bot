@@ -1,5 +1,6 @@
 package com.rezzedup.gob.command;
 
+import com.rezzedup.gob.Emoji;
 import sx.blah.discord.handle.obj.IMessage;
 
 public class UnknownCommandExecutor implements Executable
@@ -18,7 +19,7 @@ public class UnknownCommandExecutor implements Executable
         {
             try
             {
-                message.getChannel().sendMessage("I don't understand that command. \uD83D\uDE22");
+                message.getChannel().sendMessage("I don't understand that command. " + Emoji.CRY);
             }
             catch (Exception e)
             {
