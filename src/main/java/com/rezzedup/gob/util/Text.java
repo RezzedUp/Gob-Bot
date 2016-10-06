@@ -33,6 +33,21 @@ public class Text
         return formattedResponse(header, String.join("\n ", content));
     }
     
+    public static String formattedCodeResponse(String header, String language, String content)
+    {
+        return String.format("%s\n - - -```%s%s``` - - -", header, language, content);
+    }
+    
+    public static String formattedCodeResponse(String header, String language, String... content)
+    {
+        return formattedCodeResponse(header, language, String.join("\n ", content));
+    }
+    
+    public static String formattedCodeResponse(String header, String language, List<String> content)
+    {
+        return formattedCodeResponse(header, language, String.join("\n ", content));
+    }
+    
     public static String formatGuild(IMessage message)
     {
         return (message.getChannel().isPrivate()) ? "<PM>" : message.getGuild().getName();

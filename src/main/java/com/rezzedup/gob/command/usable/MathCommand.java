@@ -31,18 +31,17 @@ public class MathCommand extends Command
         try
         {
             double result = evaluator.evaluate(expresssion);
-            msg = Text.formattedResponse
+            msg = Text.formattedCodeResponse
             (
-                "Solved it, " + message.getAuthor().mention() + "! " + Emoji.NERD,
-                String.format("```%s = %s```", expresssion, (result % 1 == 0) ? (long) result : result)
+                "Solved it, " + message.getAuthor().mention() + "! " + Emoji.NERD, "",
+                String.format("%s = %s", expresssion, (result == (long) result) ? (long) result : result)
             );
         }
         catch (IllegalArgumentException e)
         {
-            msg = Text.formattedResponse
+            msg = Text.formattedCodeResponse
             (
-                "I couldn't solve that, " + message.getAuthor().mention() + " " + Emoji.CRY,
-                "```" + e.getMessage() + "```"
+                "I couldn't solve that, " + message.getAuthor().mention() + " " + Emoji.CRY, "", e.getMessage()
             );
         }
         
