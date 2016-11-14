@@ -2,26 +2,25 @@ package com.rezzedup.gob.command.usable;
 
 import com.rezzedup.gob.command.Command;
 import com.rezzedup.gob.util.Text;
-import sx.blah.discord.api.IDiscordClient;
-import sx.blah.discord.handle.obj.IMessage;
+import net.dv8tion.jda.core.entities.Message;
 
 public class InfoCommand extends Command
 {
-    public InfoCommand(IDiscordClient client)
+    public InfoCommand()
     {
-        super(client, new String[]{"info", "about"});
+        super(new String[]{"info", "about"});
         setDescrption("Displays information about Gob-bot.");
     }
     
     @Override
-    public void execute(String[] args, IMessage message)
+    public void execute(String[] args, Message message)
     {
         String send = Text.formattedResponse
         (
             "A little bit about me",
             "Created by: **RezzedUp**",
             "GitHub repository: <https://github.com/RezzedUp/Gob-Bot>",
-            "Uses __Discord4J__: <https://github.com/austinv11/Discord4J>"
+            "Uses __JDA__: <https://github.com/DV8FromTheWorld/JDA>"
         );
         
         try

@@ -8,9 +8,8 @@ import com.rezzedup.gob.Emoji;
 import com.rezzedup.gob.command.Command;
 import com.rezzedup.gob.util.Text;
 
-import sx.blah.discord.api.IDiscordClient;
-import sx.blah.discord.handle.obj.IChannel;
-import sx.blah.discord.handle.obj.IMessage;
+import net.dv8tion.jda.core.entities.Message;
+import net.dv8tion.jda.core.entities.MessageChannel;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -28,9 +27,9 @@ public class CleverBotCommand extends Command
     private ChatterBotFactory factory = new ChatterBotFactory();
     private Timer timer = new Timer();
     
-    public CleverBotCommand(IDiscordClient client)
+    public CleverBotCommand()
     {
-        super(client, new String[]{"clever", "cleverbot", Emoji.CL.toString(), Emoji.ROBOT.toString()});
+        super(new String[]{"clever", "cleverbot", Emoji.CL.toString(), Emoji.ROBOT.toString()});
         setDescrption("Have a conversation with CleverBot.");
     
         long hour = 1000*60*60;
@@ -46,9 +45,9 @@ public class CleverBotCommand extends Command
     }
     
     @Override
-    public void execute(String[] args, IMessage message)
+    public void execute(String[] args, Message message)
     {
-        IChannel channel = message.getChannel();
+        MessageChannel channel = message.getChannel();
         String id = Text.formatGuildChannel(message);
         CleverBotSession session = sessions.get(id);
         

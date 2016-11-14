@@ -1,14 +1,14 @@
 package com.rezzedup.gob.command;
 
-import sx.blah.discord.handle.obj.IMessage;
+import net.dv8tion.jda.core.entities.Message;
 
 public class CommandExecutor implements Executable
 {
     private final Command command;
     private final String[] args;
-    private final IMessage message;
+    private final Message message;
     
-    public CommandExecutor(Command command, String[] args, IMessage message)
+    public CommandExecutor(Command command, String[] args, Message message)
     {
         this.command = command;
         this.args = args;

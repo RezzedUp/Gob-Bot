@@ -1,17 +1,14 @@
 package com.rezzedup.gob.command;
 
-import sx.blah.discord.api.IDiscordClient;
-import sx.blah.discord.handle.obj.IMessage;
+import net.dv8tion.jda.core.entities.Message;
 
 public abstract class Command
 {
     protected final String[] aliases;
-    protected final IDiscordClient client;
     protected String descrption = "";
     
-    public Command(IDiscordClient client, String[] aliases)
+    public Command(String[] aliases)
     {
-        this.client = client;
         this.aliases = aliases;
     }
     
@@ -30,5 +27,5 @@ public abstract class Command
         return descrption;
     }
     
-    public abstract void execute(String[] args, IMessage message);
+    public abstract void execute(String[] args, Message message);
 }

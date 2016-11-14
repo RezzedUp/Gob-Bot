@@ -1,6 +1,6 @@
 package com.rezzedup.gob.command;
 
-import sx.blah.discord.handle.obj.IMessage;
+import net.dv8tion.jda.core.entities.Message;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -15,7 +15,7 @@ public class CommandParser
     // First alias -> All aliases
     private final Map<String, String[]> aliases = new LinkedHashMap<>();
     
-    public Executable parse(String command, IMessage message)
+    public Executable parse(String command, Message message)
     {
         String[] parts = command.split(" ");
         String[] args = Arrays.copyOfRange(parts, 1, parts.length);

@@ -1,13 +1,14 @@
 package com.rezzedup.gob.command;
 
 import com.rezzedup.gob.Emoji;
-import sx.blah.discord.handle.obj.IMessage;
+import net.dv8tion.jda.core.entities.ChannelType;
+import net.dv8tion.jda.core.entities.Message;
 
 public class UnknownCommandExecutor implements Executable
 {
-    private final IMessage message;
+    private final Message message;
     
-    public UnknownCommandExecutor(IMessage message)
+    public UnknownCommandExecutor(Message message)
     {
         this.message = message;
     }
@@ -15,7 +16,7 @@ public class UnknownCommandExecutor implements Executable
     @Override
     public void execute()
     {
-        if (message.getChannel().isPrivate())
+        if (message.isFromType(ChannelType.PRIVATE))
         {
             try
             {

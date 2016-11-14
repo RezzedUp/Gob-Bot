@@ -1,22 +1,12 @@
 package com.rezzedup.gob.util;
 
-import sx.blah.discord.handle.obj.IMessage;
+import net.dv8tion.jda.core.entities.ChannelType;
+import net.dv8tion.jda.core.entities.Message;
 
 import java.util.List;
 
 public class Text
 {
-    public static String stripWhitespace(String text)
-    {
-        if (text.startsWith(" ") || text.endsWith(" "))
-        {
-            return text.replaceAll("^ +| +$", "");
-        }
-        else
-        {
-            return text;
-        }
-    }
     
     public static String formattedResponse(String header, String content)
     {
@@ -48,12 +38,12 @@ public class Text
         return formattedCodeResponse(header, language, String.join("\n", content));
     }
     
-    public static String formatGuild(IMessage message)
+    public static String formatGuild(Message message)
     {
-        return (message.getChannel().isPrivate()) ? "<PM>" : message.getGuild().getName();
+        return (message.isFromType(ChannelType.PRIVATE)) ? "<PM>" : message.getGuild().getName();
     }
     
-    public static String formatGuildChannel(IMessage message)
+    public static String formatGuildChannel(Message message)
     {
         return "(" + formatGuild(message) + ")#" + message.getChannel().getName();
     }

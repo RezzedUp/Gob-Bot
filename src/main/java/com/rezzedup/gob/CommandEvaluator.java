@@ -3,24 +3,21 @@ package com.rezzedup.gob;
 import com.rezzedup.gob.command.CommandParser;
 import com.rezzedup.gob.util.Text;
 
-import sx.blah.discord.api.IDiscordClient;
-import sx.blah.discord.api.events.EventSubscriber;
-import sx.blah.discord.handle.impl.events.MessageReceivedEvent;
-import sx.blah.discord.handle.obj.IChannel;
-import sx.blah.discord.handle.obj.IMessage;
-import sx.blah.discord.handle.obj.IUser;
+import net.dv8tion.jda.core.JDA;
+import net.dv8tion.jda.core.entities.ChannelType;
+import net.dv8tion.jda.core.entities.Message;
+import net.dv8tion.jda.core.entities.User;
 
-public class CommandListener
+public class CommandEvaluator
 {
-    private final IDiscordClient client;
-    private final CommandParser parser;
+    private final CommandParser parser = new CommandParser();
+    private final String id;
+    private final String mention;
     
-    public CommandListener(IDiscordClient client)
+    public CommandEvaluator(JDA jda)
     {
-        this.client = client;
-        this.parser = new CommandParser();
-        
-        client.getDispatcher().registerListener(this);
+        this.id = jda.getSelfUser().getId();
+        this.mention = "<@" + this.id + ">";
     }
     
     public CommandParser getCommandParser()
@@ -28,18 +25,16 @@ public class CommandListener
         return parser;
     }
     
-    @EventSubscriber
-    public void onMessage(MessageReceivedEvent event)
+    public void evaluate(Message message)
     {
-        IMessage message = event.getMessage();
         String msg = message.getContent();
         
-        if (avoidSelfInvoke(message))
+        if (isSelfInvoke(message))
         {
             return;
         }
         
-        if (!message.getChannel().isPrivate())
+        if (!message.isFromType(ChannelType.PRIVATE))
         {
             for (String identifier : Gob.IDENTIFIERS)
             {
@@ -55,8 +50,6 @@ public class CommandListener
                 }
             }
     
-            String mention = "<@" + client.getOurUser().getID() + ">";
-            
             if (msg.startsWith(mention))
             {
                 command(msg.substring(mention.length()), message);
@@ -68,17 +61,17 @@ public class CommandListener
         }
     }
     
-    private void command(String content, IMessage message)
+    private void command(String content, Message message)
     {
-        String command = Text.stripWhitespace(content);
+        String command = content.trim();
         
         log(message, command);
         parser.parse(command, message).execute();
     }
     
-    private void log(IMessage message, String content)
+    private void log(Message message, String content)
     {
-        IUser user = message.getAuthor();
+        User user = message.getAuthor();
     
         Gob.status(String.format
         (
@@ -87,8 +80,9 @@ public class CommandListener
         ));
     }
     
-    private boolean avoidSelfInvoke(IMessage message)
+    // If true, avoid evaluating the command.
+    private boolean isSelfInvoke(Message message)
     {
-        return (message.getAuthor().getID().equalsIgnoreCase(client.getOurUser().getID()));
+        return (message.getAuthor().getId().equalsIgnoreCase(id));
     }
 }

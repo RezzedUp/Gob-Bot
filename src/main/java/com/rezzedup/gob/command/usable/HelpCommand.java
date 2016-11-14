@@ -1,12 +1,12 @@
 package com.rezzedup.gob.command.usable;
 
+import com.rezzedup.gob.Emoji;
 import com.rezzedup.gob.command.Command;
 import com.rezzedup.gob.command.CommandParser;
-
 import com.rezzedup.gob.util.Text;
-import sx.blah.discord.api.IDiscordClient;
-import sx.blah.discord.handle.obj.IChannel;
-import sx.blah.discord.handle.obj.IMessage;
+
+import net.dv8tion.jda.core.entities.Message;
+import net.dv8tion.jda.core.entities.MessageChannel;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -16,18 +16,18 @@ public class HelpCommand extends Command
 {
     private final CommandParser parser;
     
-    public HelpCommand(IDiscordClient client, CommandParser parser)
-    {                                        // :question:
-        super(client, new String[]{"help", "?", "\u2753"});
+    public HelpCommand(CommandParser parser)
+    {
+        super(new String[]{"help", "?", Emoji.QUESTION.toString()});
         setDescrption("Displays all usable commands.");
         
         this.parser = parser;
     }
     
     @Override
-    public void execute(String[] args, IMessage message)
+    public void execute(String[] args, Message message)
     {
-        IChannel channel = message.getChannel();
+        MessageChannel channel = message.getChannel();
         List<String> msg = new ArrayList<>();
         
         for (Command command : parser.getRegisteredCommands())

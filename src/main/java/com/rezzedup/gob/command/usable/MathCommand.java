@@ -4,27 +4,24 @@ import com.fathzer.soft.javaluator.DoubleEvaluator;
 import com.rezzedup.gob.Emoji;
 import com.rezzedup.gob.command.Command;
 import com.rezzedup.gob.util.Text;
-import sx.blah.discord.api.IDiscordClient;
-import sx.blah.discord.handle.obj.IChannel;
-import sx.blah.discord.handle.obj.IMessage;
-import sx.blah.discord.util.DiscordException;
-import sx.blah.discord.util.MissingPermissionsException;
-import sx.blah.discord.util.RateLimitException;
+
+import net.dv8tion.jda.core.entities.Message;
+import net.dv8tion.jda.core.entities.MessageChannel;
 
 public class MathCommand extends Command
 {
     private static DoubleEvaluator evaluator = new DoubleEvaluator();
     
-    public MathCommand(IDiscordClient client)
+    public MathCommand()
     {
-        super(client, new String[]{"math", "solve", "=", "equation", "equals", "eq", Emoji.NUMBER_1234.toString()});
+        super(new String[]{"math", "solve", "=", "equation", "equals", "eq", Emoji.NUMBER_1234.toString()});
         setDescrption("Solves a math expression");
     }
     
     @Override
-    public void execute(String[] args, IMessage message)
+    public void execute(String[] args, Message message)
     {
-        IChannel channel = message.getChannel();
+        MessageChannel channel = message.getChannel();
         String expression = String.join(" ", args);
         String msg;
         
@@ -35,7 +32,7 @@ public class MathCommand extends Command
             
             msg = Text.formattedCodeResponse
             (
-                "Solved it, " + message.getAuthor().mention() + "! " + Emoji.NERD, "",
+                "Solved it, " + message.getAuthor().getAsMention() + "! " + Emoji.NERD, "",
                 String.format("%s = %s", expression, answer)
             );
         }
@@ -43,17 +40,10 @@ public class MathCommand extends Command
         {
             msg = Text.formattedCodeResponse
             (
-                "I couldn't solve that, " + message.getAuthor().mention() + " " + Emoji.CRY, "", e.getMessage()
+                "I couldn't solve that, " + message.getAuthor().getAsMention() + " " + Emoji.CRY, "", e.getMessage()
             );
         }
         
-        try
-        {
-            channel.sendMessage(msg);
-        }
-        catch (MissingPermissionsException | RateLimitException | DiscordException e)
-        {
-            e.printStackTrace();
-        }
+        channel.sendMessage(msg);
     }
 }

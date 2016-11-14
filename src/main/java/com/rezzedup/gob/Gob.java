@@ -6,17 +6,19 @@ import com.rezzedup.gob.command.usable.InfoCommand;
 import com.rezzedup.gob.command.usable.MathCommand;
 import com.rezzedup.gob.command.usable.CleverBotCommand;
 
-import sx.blah.discord.Discord4J;
-import sx.blah.discord.api.ClientBuilder;
-import sx.blah.discord.api.IDiscordClient;
-import sx.blah.discord.api.events.EventSubscriber;
-import sx.blah.discord.handle.impl.events.ReadyEvent;
-import sx.blah.discord.util.DiscordException;
+import net.dv8tion.jda.core.AccountType;
+import net.dv8tion.jda.core.JDA;
+import net.dv8tion.jda.core.JDABuilder;
+import net.dv8tion.jda.core.events.ReadyEvent;
+import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.core.exceptions.RateLimitedException;
+import net.dv8tion.jda.core.hooks.ListenerAdapter;
 
+import javax.security.auth.login.LoginException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-public class Gob
+public class Gob extends ListenerAdapter
 {
     public static final String[] IDENTIFIERS = 
     {
@@ -31,32 +33,25 @@ public class Gob
             return;
         }
     
-        Discord4J.disableChannelWarnings();
-        
-        ClientBuilder builder = new ClientBuilder();
-        IDiscordClient client;
+        JDA jda;
     
         try
         {
-            builder.withToken(args[0]);
-            
-            client = builder.login();
+            jda = new JDABuilder(AccountType.BOT).setToken(args[0]).buildBlocking();
         }
-        catch (DiscordException e)
+        catch (LoginException | InterruptedException | RateLimitedException e)
         {
             status("Unable to log in.");
             e.printStackTrace();
             return;
         }
+        if (jda == null)
+        {
+            status("JDA instance is null.");
+            return;
+        }
         
-        client.getDispatcher().registerListener(new Gob());
-    
-        CommandParser parser = new CommandListener(client).getCommandParser();
-        
-        parser.register(new HelpCommand(client, parser));
-        parser.register(new InfoCommand(client));
-        parser.register(new CleverBotCommand(client));
-        parser.register(new MathCommand(client));
+        new Gob(jda);
     }
     
     public static void status(String message)
@@ -65,9 +60,34 @@ public class Gob
         System.out.println(String.format("[%s]: %s", time, message));
     }
     
-    @EventSubscriber
-    public void onStart(ReadyEvent event)
+    private final JDA jda;
+    private final CommandEvaluator command;
+    
+    public Gob(JDA jda)
+    {
+        this.jda = jda;
+        this.command = new CommandEvaluator(jda);
+        
+        jda.addEventListener(this);
+        
+        CommandParser parser = command.getCommandParser();
+        
+        parser.register(new HelpCommand(parser));
+        parser.register(new InfoCommand());
+        parser.register(new CleverBotCommand());
+        parser.register(new MathCommand());
+    }
+    
+    @Override
+    public void onReady(ReadyEvent event)
     {
         status("\n\n\n\n --- Gob --- \n Ready to go! \n\n\n");
     }
+    
+    @Override
+    public void onMessageReceived(MessageReceivedEvent event)
+    {
+        command.evaluate(event.getMessage());
+    }
+    
 }
