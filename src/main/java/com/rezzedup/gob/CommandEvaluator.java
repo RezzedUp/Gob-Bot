@@ -17,7 +17,7 @@ public class CommandEvaluator
     public CommandEvaluator(JDA jda)
     {
         this.id = jda.getSelfUser().getId();
-        this.mention = "<@" + this.id + ">";
+        this.mention = jda.getSelfUser().getAsMention();
     }
     
     public CommandParser getCommandParser()
@@ -64,7 +64,6 @@ public class CommandEvaluator
     private void command(String content, Message message)
     {
         String command = content.trim();
-        
         log(message, command);
         parser.parse(command, message).execute();
     }
