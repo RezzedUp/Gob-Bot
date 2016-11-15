@@ -20,7 +20,6 @@ public class HelpCommand extends Command
     {
         super(new String[]{"help", "?", Emoji.QUESTION.toString()});
         setDescrption("Displays all usable commands.");
-        
         this.parser = parser;
     }
     
@@ -55,7 +54,7 @@ public class HelpCommand extends Command
         
         try
         {
-            channel.sendMessage(Text.formattedResponse("Here's what I can do... \uD83D\uDC7A", msg));
+            channel.sendMessage(Text.formattedResponse("Here's what I can do... \uD83D\uDC7A", msg)).queue();
         }
         catch (Exception e)
         {

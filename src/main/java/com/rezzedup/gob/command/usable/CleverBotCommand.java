@@ -55,7 +55,7 @@ public class CleverBotCommand extends Command
         {
             try
             {
-                channel.sendMessage("Starting a new **CleverBot** session!");
+                channel.sendMessage("Starting a new **CleverBot** session!").queue();
                 
                 ChatterBotSession bot = factory.create(ChatterBotType.CLEVERBOT).createSession();
                 session = new CleverBotSession(bot);
@@ -71,7 +71,7 @@ public class CleverBotCommand extends Command
         
         try
         {
-            channel.sendMessage(session.getSession().think(String.join(" ", args)));
+            channel.sendMessage(session.getSession().think(String.join(" ", args))).queue();
         }
         catch (Exception e)
         {

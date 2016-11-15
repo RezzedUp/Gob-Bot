@@ -22,14 +22,6 @@ public class InfoCommand extends Command
             "GitHub repository: <https://github.com/RezzedUp/Gob-Bot>",
             "Uses __JDA__: <https://github.com/DV8FromTheWorld/JDA>"
         );
-        
-        try
-        {
-            message.getChannel().sendMessage(send);
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
+        message.getChannel().sendMessage(send).queue();
     }
 }

@@ -9,17 +9,19 @@ import com.rezzedup.gob.command.usable.CleverBotCommand;
 import net.dv8tion.jda.core.AccountType;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.JDABuilder;
-import net.dv8tion.jda.core.events.ReadyEvent;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.core.exceptions.RateLimitedException;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
 
 import javax.security.auth.login.LoginException;
+import java.io.Console;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 public class Gob extends ListenerAdapter
 {
+    private static boolean active = true;
+    
     public static final String[] IDENTIFIERS = 
     {
         Emoji.JAPANESE_GOBLIN.toString(), ":gob:", ":gob", "gob:", "gob "
@@ -52,6 +54,27 @@ public class Gob extends ListenerAdapter
         }
         
         new Gob(jda);
+    
+        Console console = System.console();
+        
+        while (true)
+        {
+            String command = console.readLine();
+            
+            switch (command.toLowerCase())
+            {
+                case "q":
+                case "quit":
+                case "shutdown":
+                case "stop":
+                    status("Shutting down...");
+                    System.exit(0);
+                    return;
+                
+                default:
+                    status("Unknown command.");
+            }
+        }
     }
     
     public static void status(String message)
@@ -60,12 +83,10 @@ public class Gob extends ListenerAdapter
         System.out.println(String.format("[%s]: %s", time, message));
     }
     
-    private final JDA jda;
     private final CommandEvaluator command;
     
     public Gob(JDA jda)
     {
-        this.jda = jda;
         this.command = new CommandEvaluator(jda);
         
         jda.addEventListener(this);
@@ -76,11 +97,7 @@ public class Gob extends ListenerAdapter
         parser.register(new InfoCommand());
         parser.register(new CleverBotCommand());
         parser.register(new MathCommand());
-    }
     
-    @Override
-    public void onReady(ReadyEvent event)
-    {
         status("\n\n\n\n --- Gob --- \n Ready to go! \n\n\n");
     }
     
@@ -89,5 +106,4 @@ public class Gob extends ListenerAdapter
     {
         command.evaluate(event.getMessage());
     }
-    
 }

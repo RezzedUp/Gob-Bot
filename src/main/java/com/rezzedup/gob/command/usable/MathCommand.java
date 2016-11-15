@@ -44,6 +44,6 @@ public class MathCommand extends Command
             );
         }
         
-        channel.sendMessage(msg);
+        channel.sendMessage(msg).queue();
     }
 }

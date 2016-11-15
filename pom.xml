@@ -24,7 +24,7 @@
         <dependency>
             <groupId>net.dv8tion</groupId>
             <artifactId>JDA</artifactId>
-            <version>3.0.BETA_75</version>
+            <version>3.0.BETA_81</version>
             <scope>compile</scope>
         </dependency>
         <!-- Chatter Bot API https://github.com/pierredavidbelanger/chatter-bot-api -->

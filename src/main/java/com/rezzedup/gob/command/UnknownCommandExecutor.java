@@ -20,7 +20,7 @@ public class UnknownCommandExecutor implements Executable
         {
             try
             {
-                message.getChannel().sendMessage("I don't understand that command. " + Emoji.CRY);
+                message.getChannel().sendMessage("I don't understand that command. " + Emoji.CRY).queue();
             }
             catch (Exception e)
             {
