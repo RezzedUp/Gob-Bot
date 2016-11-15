@@ -9,6 +9,8 @@ import com.rezzedup.gob.command.usable.MathCommand;
 import net.dv8tion.jda.core.AccountType;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.JDABuilder;
+import net.dv8tion.jda.core.entities.Game;
+import net.dv8tion.jda.core.entities.impl.GameImpl;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.core.exceptions.RateLimitedException;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
@@ -105,6 +107,9 @@ public class Gob extends ListenerAdapter
         parser.register(new MathCommand());
     
         status("\n\n\n\n --- Gob --- \n Ready to go! \n\n\n");
+    
+        Game game = new GameImpl(":gob help", "", Game.GameType.DEFAULT);
+        jda.getPresence().setGame(game);
     }
     
     @Override
