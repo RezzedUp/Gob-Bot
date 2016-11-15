@@ -1,10 +1,10 @@
 package com.rezzedup.gob;
 
 import com.rezzedup.gob.command.CommandParser;
+import com.rezzedup.gob.command.usable.CleverBotCommand;
 import com.rezzedup.gob.command.usable.HelpCommand;
 import com.rezzedup.gob.command.usable.InfoCommand;
 import com.rezzedup.gob.command.usable.MathCommand;
-import com.rezzedup.gob.command.usable.CleverBotCommand;
 
 import net.dv8tion.jda.core.AccountType;
 import net.dv8tion.jda.core.JDA;
@@ -14,7 +14,6 @@ import net.dv8tion.jda.core.exceptions.RateLimitedException;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
 
 import javax.security.auth.login.LoginException;
-import java.io.Console;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -54,23 +53,24 @@ public class Gob extends ListenerAdapter
         }
         
         new Gob(jda);
-    
-        Console console = System.console();
         
+        Runtime.getRuntime().addShutdownHook(new Thread(() ->
+        {
+            System.out.println("Gob: Bye!");
+        }));
+    
         while (true)
         {
-            String command = console.readLine();
-            
-            switch (command.toLowerCase())
+            String line = System.console().readLine();
+
+            switch (line.toLowerCase())
             {
                 case "q":
                 case "quit":
                 case "shutdown":
                 case "stop":
-                    status("Shutting down...");
-                    System.exit(0);
-                    return;
-                
+                    exit();
+    
                 default:
                     status("Unknown command.");
             }
@@ -81,6 +81,12 @@ public class Gob extends ListenerAdapter
     {
         String time = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss a"));
         System.out.println(String.format("[%s]: %s", time, message));
+    }
+    
+    private static void exit()
+    {
+        status("Shutting down...");
+        System.exit(0);
     }
     
     private final CommandEvaluator command;
