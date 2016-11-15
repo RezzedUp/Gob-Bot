@@ -38,18 +38,13 @@ public class CommandEvaluator
         {
             for (String identifier : Gob.IDENTIFIERS)
             {
-                if (identifier.length() >= msg.length())
-                {
-                    continue;
-                }
-        
-                if (msg.substring(0, identifier.length()).equalsIgnoreCase(identifier))
+                if (msg.startsWith(identifier))
                 {
                     command(msg.substring(identifier.length()), message);
                     return;
                 }
             }
-    
+            
             if (msg.startsWith(mention))
             {
                 command(msg.substring(mention.length()), message);
@@ -71,7 +66,6 @@ public class CommandEvaluator
     private void log(Message message, String content)
     {
         User user = message.getAuthor();
-    
         Gob.status(String.format
         (
             "%s#%s in %s sent: %s",
