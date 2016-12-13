@@ -1,6 +1,6 @@
 package com.rezzedup.gob;
 
-import java.awt.*;
+import java.awt.Color;
 
 public enum ColorPalette
 {
