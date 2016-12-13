@@ -1,12 +1,16 @@
 package com.rezzedup.gob;
 
-import com.rezzedup.gob.command.CommandParser;
 import com.rezzedup.gob.util.Text;
 
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.entities.ChannelType;
 import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.entities.User;
+
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 public class CommandEvaluator
 {
@@ -77,5 +81,60 @@ public class CommandEvaluator
     private boolean isSelfInvoke(Message message)
     {
         return (message.getAuthor().getId().equalsIgnoreCase(id));
+    }
+    
+    public static class CommandParser
+    {
+        // First alias -> Command
+        private final Map<String, Command> commands = new LinkedHashMap<>();
+        
+        // First alias -> All aliases
+        private final Map<String, String[]> aliases = new LinkedHashMap<>();
+        
+        public Executable parse(String command, Message message)
+        {
+            String[] parts = command.split(" ");
+            String[] args = Arrays.copyOfRange(parts, 1, parts.length);
+            
+            if (commands.containsKey(parts[0]))
+            {
+                return new CommandExecutor(commands.get(parts[0]), args, message);
+            }
+            
+            for (String cmd : commands.keySet())
+            {
+                boolean root = true;
+                
+                for (String alias : aliases.get(cmd))
+                {
+                    // Already checked first alias: avoids rechecking.
+                    if (root)
+                    {
+                        root = false;
+                        continue;
+                    }
+                    
+                    if (parts[0].equalsIgnoreCase(alias))
+                    {
+                        return new CommandExecutor(commands.get(cmd), args, message);
+                    }
+                }
+            }
+            
+            return new UnknownCommandExecutor(message);
+        }
+        
+        public void register(Command command)
+        {
+            String cmd = command.getAliases()[0];
+            
+            commands.put(cmd, command);
+            aliases.put(cmd, command.getAliases());
+        }
+        
+        public Collection<Command> getRegisteredCommands()
+        {
+            return commands.values();
+        }
     }
 }

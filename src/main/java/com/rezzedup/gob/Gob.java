@@ -1,10 +1,9 @@
 package com.rezzedup.gob;
 
-import com.rezzedup.gob.command.CommandParser;
-import com.rezzedup.gob.command.usable.CleverBotCommand;
-import com.rezzedup.gob.command.usable.HelpCommand;
-import com.rezzedup.gob.command.usable.InfoCommand;
-import com.rezzedup.gob.command.usable.MathCommand;
+import com.rezzedup.gob.commands.CleverBotCommand;
+import com.rezzedup.gob.commands.HelpCommand;
+import com.rezzedup.gob.commands.InfoCommand;
+import com.rezzedup.gob.commands.MathCommand;
 
 import net.dv8tion.jda.core.AccountType;
 import net.dv8tion.jda.core.JDA;
@@ -99,7 +98,7 @@ public class Gob extends ListenerAdapter
         
         jda.addEventListener(this);
         
-        CommandParser parser = command.getCommandParser();
+        CommandEvaluator.CommandParser parser = command.getCommandParser();
         
         parser.register(new HelpCommand(parser));
         parser.register(new InfoCommand());

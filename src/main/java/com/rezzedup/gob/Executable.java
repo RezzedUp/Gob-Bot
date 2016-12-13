@@ -1,4 +1,4 @@
-package com.rezzedup.gob.command;
+package com.rezzedup.gob;
 
 public interface Executable
 {

@@ -1,12 +1,11 @@
-package com.rezzedup.gob.command.usable;
+package com.rezzedup.gob.commands;
 
 import com.fathzer.soft.javaluator.DoubleEvaluator;
+import com.rezzedup.gob.ColorPalette;
+import com.rezzedup.gob.Command;
 import com.rezzedup.gob.Emoji;
-import com.rezzedup.gob.command.Command;
-import com.rezzedup.gob.util.Text;
-
+import com.rezzedup.gob.Response;
 import net.dv8tion.jda.core.entities.Message;
-import net.dv8tion.jda.core.entities.MessageChannel;
 
 public class MathCommand extends Command
 {
@@ -21,29 +20,27 @@ public class MathCommand extends Command
     @Override
     public void execute(String[] args, Message message)
     {
-        MessageChannel channel = message.getChannel();
+        Response response = new Response(message);
         String expression = String.join(" ", args);
-        String msg;
         
         try
         {
             double result = evaluator.evaluate(expression);
             String answer = String.valueOf(result).replaceAll("[.]?0+$", "");
             
-            msg = Text.formattedCodeResponse
-            (
-                "Solved it, " + message.getAuthor().getAsMention() + "! " + Emoji.NERD, "",
-                String.format("%s = %s", expression, answer)
-            );
+            response
+                .setColor(ColorPalette.BLUE)
+                .setDescription("Solved it, " + message.getAuthor().getAsMention() + "! " + Emoji.SMILE)
+                .addField("Result:", String.format("```haskell\n%s = %s\n```", expression, answer), false);
         }
         catch (IllegalArgumentException e)
         {
-            msg = Text.formattedCodeResponse
-            (
-                "I couldn't solve that, " + message.getAuthor().getAsMention() + " " + Emoji.CRY, "", e.getMessage()
-            );
+            response
+                .setColor(ColorPalette.GOB_RED)
+                .setDescription("I couldn't solve that, " + message.getAuthor().getAsMention() + " " + Emoji.CRY)
+                .addField("Error:", "```haskell\n" + e.getMessage() + "\n```", false);
         }
         
-        channel.sendMessage(msg).queue();
+        response.send();
     }
 }

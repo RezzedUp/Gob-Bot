@@ -1,6 +1,5 @@
-package com.rezzedup.gob.command;
+package com.rezzedup.gob;
 
-import com.rezzedup.gob.Emoji;
 import net.dv8tion.jda.core.entities.ChannelType;
 import net.dv8tion.jda.core.entities.Message;
 

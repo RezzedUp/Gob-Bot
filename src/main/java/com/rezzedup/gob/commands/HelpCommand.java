@@ -1,8 +1,8 @@
-package com.rezzedup.gob.command.usable;
+package com.rezzedup.gob.commands;
 
+import com.rezzedup.gob.CommandEvaluator;
 import com.rezzedup.gob.Emoji;
-import com.rezzedup.gob.command.Command;
-import com.rezzedup.gob.command.CommandParser;
+import com.rezzedup.gob.Command;
 import com.rezzedup.gob.util.Text;
 
 import net.dv8tion.jda.core.entities.Message;
@@ -14,9 +14,9 @@ import java.util.List;
 
 public class HelpCommand extends Command
 {
-    private final CommandParser parser;
+    private final CommandEvaluator.CommandParser parser;
     
-    public HelpCommand(CommandParser parser)
+    public HelpCommand(CommandEvaluator.CommandParser parser)
     {
         super(new String[]{"help", "?", Emoji.QUESTION.toString()});
         setDescrption("Displays all usable commands.");
