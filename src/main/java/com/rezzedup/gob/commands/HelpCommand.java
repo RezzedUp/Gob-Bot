@@ -1,8 +1,8 @@
 package com.rezzedup.gob.commands;
 
-import com.rezzedup.gob.CommandEvaluator;
+import com.rezzedup.gob.core.CommandEvaluator;
 import com.rezzedup.gob.Emoji;
-import com.rezzedup.gob.Command;
+import com.rezzedup.gob.core.Command;
 import com.rezzedup.gob.util.Text;
 
 import net.dv8tion.jda.core.entities.Message;

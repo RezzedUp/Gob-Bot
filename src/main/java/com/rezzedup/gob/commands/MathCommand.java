@@ -2,7 +2,7 @@ package com.rezzedup.gob.commands;
 
 import com.fathzer.soft.javaluator.DoubleEvaluator;
 import com.rezzedup.gob.ColorPalette;
-import com.rezzedup.gob.Command;
+import com.rezzedup.gob.core.Command;
 import com.rezzedup.gob.Emoji;
 import com.rezzedup.gob.Response;
 import net.dv8tion.jda.core.entities.Message;

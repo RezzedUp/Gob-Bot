@@ -1,5 +1,6 @@
-package com.rezzedup.gob;
+package com.rezzedup.gob.core;
 
+import com.rezzedup.gob.Gob;
 import com.rezzedup.gob.util.Text;
 
 import net.dv8tion.jda.core.JDA;

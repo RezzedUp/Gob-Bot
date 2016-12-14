@@ -5,6 +5,7 @@ import com.rezzedup.gob.commands.HelpCommand;
 import com.rezzedup.gob.commands.InfoCommand;
 import com.rezzedup.gob.commands.MathCommand;
 
+import com.rezzedup.gob.core.CommandEvaluator;
 import net.dv8tion.jda.core.AccountType;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.JDABuilder;

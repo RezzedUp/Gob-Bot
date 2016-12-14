@@ -5,7 +5,7 @@ import com.google.code.chatterbotapi.ChatterBotFactory;
 import com.google.code.chatterbotapi.ChatterBotSession;
 import com.google.code.chatterbotapi.ChatterBotType;
 import com.rezzedup.gob.Emoji;
-import com.rezzedup.gob.Command;
+import com.rezzedup.gob.core.Command;
 import com.rezzedup.gob.util.Text;
 
 import net.dv8tion.jda.core.entities.Message;
