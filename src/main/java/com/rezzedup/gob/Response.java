@@ -5,8 +5,6 @@ import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.entities.MessageChannel;
 import net.dv8tion.jda.core.entities.User;
 
-import java.awt.*;
-
 public class Response extends EmbedBuilder
 {
     private final StringBuilder description = new StringBuilder();
