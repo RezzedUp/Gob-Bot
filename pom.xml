@@ -7,7 +7,7 @@
     <groupId>com.rezzedup</groupId>
     <artifactId>gob</artifactId>
     <name>Gob</name>
-    <version>1.2.0</version>
+    <version>1.2.1</version>
     <packaging>jar</packaging>
 
     <repositories>
@@ -31,7 +31,7 @@
         <dependency>
             <groupId>ca.pjer</groupId>
             <artifactId>chatter-bot-api</artifactId>
-            <version>1.4.3</version>
+            <version>1.4.5</version>
             <scope>compile</scope>
         </dependency>
         <!-- Javaluator (Equation Parser) http://javaluator.sourceforge.net/en/home/ -->
@@ -50,7 +50,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.1</version>
+                <version>3.5.1</version>
                 <configuration>
                     <source>1.8</source>
                     <target>1.8</target>
