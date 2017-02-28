@@ -8,8 +8,10 @@ import com.rezzedup.gob.util.Text;
 import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.entities.MessageChannel;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -30,7 +32,7 @@ public class CleverBotCommand extends Command
         
         this.key = key;
     
-        long hour = 1000*60; //*60; // TEMPORARY: every 60 seconds TODO: REVERT
+        long hour = 1000*60*60;
         TimerTask task = new TimerTask()
         {
             @Override
@@ -80,11 +82,11 @@ public class CleverBotCommand extends Command
             
             Gob.status
             (
-                "-- [CleverBot] --\n" +
-                "  Phrase:          '" + query.getPhrase() +  "'\n" +
-                "  Response:        '" + query.getResponse() + "'\n" +
-                "  Conversation-ID: '" + query.getConversationID() + "'\n" +
-                "-- [CleverBot] --"
+                "\n--- [CleverBot] ---\n" +
+                " Phrase:          '" + query.getPhrase() +  "'\n" +
+                " Response:        '" + query.getResponse() + "'\n" +
+                " Conversation-ID: '" + query.getConversationID() + "'\n" +
+                "--- [CleverBot] ---"
             );
             
             channel.sendMessage(query.getResponse()).queue();
@@ -97,14 +99,16 @@ public class CleverBotCommand extends Command
     
     public void removeExpiredSessions()
     {
-        Gob.status("Removing expired sessions. There are currently " + sessions.size() + " active session(s).");
+        Gob.status("[CleverBot] Removing expired sessions. There are currently " + sessions.size() + " active session(s).");
+    
+        List<String> expired = new ArrayList<>();
         
         sessions.entrySet().stream()
-            .filter(entry -> entry.getValue().isExpired())
-            .map(Map.Entry::getKey)
-            .forEach(sessions::remove);
+            .filter(entry -> entry.getValue().isExpired()).map(Map.Entry::getKey).forEach(expired::add);
+        
+        expired.forEach(sessions::remove);
     
-        Gob.status("There are now " + sessions.size() + " active session(s).");
+        Gob.status("[CleverBot] Removed " + expired.size() + " session(s). There are now " + sessions.size() + " active session(s).");
     }
     
     private static class CleverBotSession
@@ -137,7 +141,7 @@ public class CleverBotCommand extends Command
         
         boolean isExpired()
         {
-            return minutesSinceLastUse() >= 1; // 60; TEMPORARY. TODO: REVERT
+            return minutesSinceLastUse() >= 60;
         }
     }
 }
