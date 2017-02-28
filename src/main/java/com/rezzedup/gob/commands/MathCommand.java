@@ -31,14 +31,14 @@ public class MathCommand extends Command
             response
                 .setColor(ColorPalette.BLUE)
                 .setDescription("Solved it, " + message.getAuthor().getAsMention() + "! " + Emoji.SMILE)
-                .addField("Result:", String.format("```haskell\n%s = %s\n```", expression, answer), false);
+                .addField("Result:", String.format("`%s` **=** `%s`", expression, answer), true);
         }
         catch (IllegalArgumentException e)
         {
             response
                 .setColor(ColorPalette.GOB_RED)
                 .setDescription("I couldn't solve that, " + message.getAuthor().getAsMention() + " " + Emoji.CRY)
-                .addField("Error:", "```haskell\n" + e.getMessage() + "\n```", false);
+                .addField("Error:", e.getMessage(), true);
         }
         
         response.send();
