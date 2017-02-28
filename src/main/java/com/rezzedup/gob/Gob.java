@@ -25,7 +25,7 @@ public class Gob extends ListenerAdapter
     
     public static final String[] IDENTIFIERS = 
     {
-        Emoji.JAPANESE_GOBLIN.toString(), ":gob:", ":gob", "gob:", "gob "
+        Emoji.JAPANESE_GOBLIN, ":gob:", ":gob", "gob:", "gob "
     };
     
     public static void main(String[] args)

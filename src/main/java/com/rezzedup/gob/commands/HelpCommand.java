@@ -18,7 +18,7 @@ public class HelpCommand extends Command
     
     public HelpCommand(CommandEvaluator.CommandParser parser)
     {
-        super(new String[]{"help", "?", Emoji.QUESTION.toString()});
+        super("help", "?", Emoji.QUESTION);
         setDescrption("Displays all usable commands.");
         this.parser = parser;
     }

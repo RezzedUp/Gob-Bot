@@ -27,7 +27,7 @@ public class CleverBotCommand extends Command
     
     public CleverBotCommand(String key)
     {
-        super(new String[]{"clever", "cleverbot", Emoji.CL.toString(), Emoji.ROBOT.toString()});
+        super("clever", "cleverbot", Emoji.CL, Emoji.ROBOT);
         setDescrption("Have a conversation with CleverBot.");
         
         this.key = key;

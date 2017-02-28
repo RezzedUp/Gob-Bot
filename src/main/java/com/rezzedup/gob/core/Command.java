@@ -7,7 +7,7 @@ public abstract class Command
     protected final String[] aliases;
     protected String descrption = "";
     
-    public Command(String[] aliases)
+    public Command(String ... aliases)
     {
         this.aliases = aliases;
     }

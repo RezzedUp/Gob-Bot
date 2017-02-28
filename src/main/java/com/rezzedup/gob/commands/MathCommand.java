@@ -13,7 +13,7 @@ public class MathCommand extends Command
     
     public MathCommand()
     {
-        super(new String[]{"math", "solve", "=", "equation", "equals", "eq", Emoji.NUMBER_1234.toString()});
+        super("math", "solve", "=", "equation", "equals", "eq", Emoji.NUMBER_1234);
         setDescrption("Solves a math expression");
     }
     

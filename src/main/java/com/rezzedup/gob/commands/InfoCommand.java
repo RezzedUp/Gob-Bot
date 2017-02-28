@@ -8,7 +8,7 @@ public class InfoCommand extends Command
 {
     public InfoCommand()
     {
-        super(new String[]{"info", "about"});
+        super("info", "about");
         setDescrption("Displays information about Gob-bot.");
     }
     
