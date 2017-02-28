@@ -1,20 +1,15 @@
 package com.rezzedup.gob.commands;
 
-import com.google.code.chatterbotapi.ChatterBotFactory;
-
-import com.google.code.chatterbotapi.ChatterBotSession;
-import com.google.code.chatterbotapi.ChatterBotType;
+import com.michaelwflaherty.cleverbotapi.CleverBotQuery;
 import com.rezzedup.gob.Emoji;
+import com.rezzedup.gob.Gob;
 import com.rezzedup.gob.core.Command;
 import com.rezzedup.gob.util.Text;
-
 import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.entities.MessageChannel;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -23,16 +18,19 @@ import java.util.concurrent.TimeUnit;
 public class CleverBotCommand extends Command
 {
     // "Guild:Channel" -> Session
-    private Map<String, CleverBotSession> sessions = new HashMap<>();
-    private ChatterBotFactory factory = new ChatterBotFactory();
-    private Timer timer = new Timer();
+    private final Map<String, CleverBotSession> sessions = new HashMap<>();
+    private final Timer timer = new Timer();
     
-    public CleverBotCommand()
+    private final String key;
+    
+    public CleverBotCommand(String key)
     {
         super(new String[]{"clever", "cleverbot", Emoji.CL.toString(), Emoji.ROBOT.toString()});
         setDescrption("Have a conversation with CleverBot.");
+        
+        this.key = key;
     
-        long hour = 1000*60*60;
+        long hour = 1000*60; //*60; // TEMPORARY: every 60 seconds TODO: REVERT
         TimerTask task = new TimerTask()
         {
             @Override
@@ -50,16 +48,18 @@ public class CleverBotCommand extends Command
         MessageChannel channel = message.getChannel();
         String id = Text.formatGuildChannel(message);
         CleverBotSession session = sessions.get(id);
+        String phrase = String.join(" ", args);
+        CleverBotQuery query = null;
         
         if (session == null || session.isExpired())
         {
             try
             {
                 channel.sendMessage("Starting a new **CleverBot** session!").queue();
-                
-                ChatterBotSession bot = factory.create(ChatterBotType.CLEVERBOT).createSession();
-                session = new CleverBotSession(bot);
-                
+    
+                query = new CleverBotQuery(this.key, phrase);
+                session = new CleverBotSession(query);
+    
                 sessions.put(id, session);
             }
             catch (Exception e)
@@ -68,10 +68,26 @@ public class CleverBotCommand extends Command
                 return;
             }
         }
+        else 
+        {
+            query = session.getQuery();
+            query.setPhrase(phrase);
+        }
         
         try
         {
-            channel.sendMessage(session.getSession().think(String.join(" ", args))).queue();
+            query.sendRequest();
+            
+            Gob.status
+            (
+                "-- [CleverBot] --\n" +
+                "  Phrase:          '" + query.getPhrase() +  "'\n" +
+                "  Response:        '" + query.getResponse() + "'\n" +
+                "  Conversation-ID: '" + query.getConversationID() + "'\n" +
+                "-- [CleverBot] --"
+            );
+            
+            channel.sendMessage(query.getResponse()).queue();
         }
         catch (Exception e)
         {
@@ -81,35 +97,32 @@ public class CleverBotCommand extends Command
     
     public void removeExpiredSessions()
     {
-        List<String> remove = new ArrayList<>();
+        Gob.status("Removing expired sessions. There are currently " + sessions.size() + " active session(s).");
         
-        for (String id : sessions.keySet())
-        {
-            if (sessions.get(id).isExpired())
-            {
-                remove.add(id);
-            }
-        }
-        
-        remove.forEach(id -> sessions.remove(id));
+        sessions.entrySet().stream()
+            .filter(entry -> entry.getValue().isExpired())
+            .map(Map.Entry::getKey)
+            .forEach(sessions::remove);
+    
+        Gob.status("There are now " + sessions.size() + " active session(s).");
     }
     
     private static class CleverBotSession
     {
-        private final ChatterBotSession session;
+        private final CleverBotQuery query;
         
         private final Date creation = new Date();
         private Date lastUse = creation;
         
-        CleverBotSession(ChatterBotSession session)
+        CleverBotSession(CleverBotQuery query)
         {
-            this.session = session;
+            this.query = query;
         }
         
-        ChatterBotSession getSession()
+        CleverBotQuery getQuery()
         {
             lastUse = new Date();
-            return session;
+            return query;
         }
         
         Date getCreationDate()
@@ -124,7 +137,7 @@ public class CleverBotCommand extends Command
         
         boolean isExpired()
         {
-            return minutesSinceLastUse() >= 60;
+            return minutesSinceLastUse() >= 1; // 60; TEMPORARY. TODO: REVERT
         }
     }
 }

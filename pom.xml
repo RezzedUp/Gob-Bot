@@ -19,20 +19,31 @@
     </repositories>
 
     <dependencies>
-        <!-- JDA https://github.com/DV8FromTheWorld/JDA -->
+        <!-- JDA (Discord Library) -->
+        <!-- https://github.com/DV8FromTheWorld/JDA -->
         <!-- http://home.dv8tion.net:8080/job/JDA/Promoted%20Build/javadoc/ -->
         <dependency>
             <groupId>net.dv8tion</groupId>
             <artifactId>JDA</artifactId>
-            <version>3.0.BETA_103</version>
+            <version>3.0.BETA2_108</version>
             <scope>compile</scope>
         </dependency>
         <!-- Chatter Bot API https://github.com/pierredavidbelanger/chatter-bot-api -->
+        <!-- Disabled for now. -->
+        <!--
         <dependency>
             <groupId>ca.pjer</groupId>
             <artifactId>chatter-bot-api</artifactId>
             <version>1.4.6</version>
             <scope>compile</scope>
+        </dependency>
+        -->
+        <!-- CleverBotApi-Java -->
+        <!-- https://github.com/Headline22/CleverBotAPI-Java -->
+        <dependency>
+            <groupId>com.michaelwflaherty</groupId>
+            <artifactId>cleverbotapi</artifactId>
+            <version>1.0.2</version>
         </dependency>
         <!-- Javaluator (Equation Parser) http://javaluator.sourceforge.net/en/home/ -->
         <dependency>

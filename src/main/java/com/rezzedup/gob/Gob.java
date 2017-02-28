@@ -54,7 +54,16 @@ public class Gob extends ListenerAdapter
             return;
         }
         
-        new Gob(jda);
+        Gob gob = new Gob(jda);
+        
+        if (args.length >= 2)
+        {
+            gob.setCleverBotApiKey(args[1]);
+        }
+        else 
+        {
+            status("CleverBot features won't be enabled: expected CleverBot API Key as second argument.");
+        }
         
         Runtime.getRuntime().addShutdownHook(new Thread(() ->
         {
@@ -103,13 +112,17 @@ public class Gob extends ListenerAdapter
         
         parser.register(new HelpCommand(parser));
         parser.register(new InfoCommand());
-        parser.register(new CleverBotCommand());
         parser.register(new MathCommand());
     
         status("\n\n\n\n --- Gob --- \n Ready to go! \n\n\n");
     
         Game game = new GameImpl(":gob help", "", Game.GameType.DEFAULT);
         jda.getPresence().setGame(game);
+    }
+    
+    public void setCleverBotApiKey(String key)
+    {
+        this.command.getCommandParser().register(new CleverBotCommand(key));
     }
     
     @Override
