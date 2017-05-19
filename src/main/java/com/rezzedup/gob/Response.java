@@ -23,8 +23,7 @@ public class Response extends EmbedBuilder
         this(message.getChannel(), message.getAuthor());
     }
     
-    @Override
-    public EmbedBuilder setDescription(String description)
+    public Response setDescription(String description)
     {
         return append(description);
     }
