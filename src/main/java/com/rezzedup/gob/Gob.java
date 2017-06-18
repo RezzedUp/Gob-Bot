@@ -4,13 +4,10 @@ import com.rezzedup.gob.commands.CleverBotCommand;
 import com.rezzedup.gob.commands.HelpCommand;
 import com.rezzedup.gob.commands.InfoCommand;
 import com.rezzedup.gob.commands.MathCommand;
-
 import com.rezzedup.gob.core.CommandEvaluator;
 import net.dv8tion.jda.core.AccountType;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.JDABuilder;
-import net.dv8tion.jda.core.entities.Game;
-import net.dv8tion.jda.core.entities.impl.GameImpl;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.core.exceptions.RateLimitedException;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
@@ -18,6 +15,8 @@ import net.dv8tion.jda.core.hooks.ListenerAdapter;
 import javax.security.auth.login.LoginException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class Gob extends ListenerAdapter
 {
@@ -81,9 +80,11 @@ public class Gob extends ListenerAdapter
                 case "shutdown":
                 case "stop":
                     exit();
+                    break;
     
                 default:
                     status("Unknown command.");
+                    break;
             }
         }
     }
@@ -102,6 +103,8 @@ public class Gob extends ListenerAdapter
     
     private final CommandEvaluator command;
     
+    private final Timer timer = new Timer();
+    
     public Gob(JDA jda)
     {
         this.command = new CommandEvaluator(jda);
@@ -116,8 +119,21 @@ public class Gob extends ListenerAdapter
     
         status("\n\n\n\n --- Gob --- \n Ready to go! \n\n\n");
     
-        Game game = new GameImpl(":gob help", "", Game.GameType.DEFAULT);
-        jda.getPresence().setGame(game);
+        TimerTask scrollStatus = new TimerTask() 
+        {
+            private Playing status = Playing.COLON_GOB_HELP;
+            
+            @Override
+            public void run()
+            {
+                jda.getPresence().setGame(status.getGame());
+                status = status.next();
+            }
+        };
+    
+        long seconds = 30L * 1000L;
+        
+        timer.schedule(scrollStatus, 0L, seconds);
     }
     
     public void setCleverBotApiKey(String key)

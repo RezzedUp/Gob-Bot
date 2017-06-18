@@ -7,11 +7,13 @@
     <groupId>com.rezzedup</groupId>
     <artifactId>gob</artifactId>
     <name>Gob</name>
-    <version>1.2.3</version>
+    <version>1.2.4</version>
     <packaging>jar</packaging>
 
     <repositories>
-        <!-- JDA -->
+        <!-- 
+        JDA
+        -->
         <repository> 
             <id>jcenter</id>
             <url>http://jcenter.bintray.com</url>
@@ -19,33 +21,29 @@
     </repositories>
 
     <dependencies>
-        <!-- JDA (Discord Library) -->
-        <!-- https://github.com/DV8FromTheWorld/JDA -->
-        <!-- http://home.dv8tion.net:8080/job/JDA/Promoted%20Build/javadoc/ -->
+        <!-- 
+        JDA (Discord Library) 
+        https://github.com/DV8FromTheWorld/JDA 
+        http://home.dv8tion.net:8080/job/JDA/Promoted%20Build/javadoc/ 
+        -->
         <dependency>
             <groupId>net.dv8tion</groupId>
             <artifactId>JDA</artifactId>
-            <version>3.0.0_203</version>
-            <scope>compile</scope>
+            <version>3.1.0_204</version>
         </dependency>
-        <!-- Chatter Bot API https://github.com/pierredavidbelanger/chatter-bot-api -->
-        <!-- Disabled for now. -->
-        <!--
-        <dependency>
-            <groupId>ca.pjer</groupId>
-            <artifactId>chatter-bot-api</artifactId>
-            <version>1.4.6</version>
-            <scope>compile</scope>
-        </dependency>
+        <!-- 
+        CleverBotApi-Java
+        https://github.com/Headline22/CleverBotAPI-Java 
         -->
-        <!-- CleverBotApi-Java -->
-        <!-- https://github.com/Headline22/CleverBotAPI-Java -->
         <dependency>
             <groupId>com.michaelwflaherty</groupId>
             <artifactId>cleverbotapi</artifactId>
             <version>1.0.2</version>
         </dependency>
-        <!-- Javaluator (Equation Parser) http://javaluator.sourceforge.net/en/home/ -->
+        <!-- 
+        Javaluator (Equation Parser) 
+        http://javaluator.sourceforge.net/en/home/ 
+        -->
         <dependency>
             <groupId>com.fathzer</groupId>
             <artifactId>javaluator</artifactId>
@@ -67,7 +65,9 @@
                     <target>1.8</target>
                 </configuration>
             </plugin>
-            <!-- JAR configuration. -->
+            <!-- 
+            JAR configuration. 
+            -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
@@ -80,7 +80,9 @@
                     </archive>
                 </configuration>
             </plugin>
-            <!-- Shade dependencies into final JAR. -->
+            <!-- 
+            Shade dependencies into final JAR.
+            -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
