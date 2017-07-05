@@ -34,28 +34,26 @@ public class CommandEvaluator
     {
         String msg = message.getContent();
         
-        if (isSelfInvoke(message))
+        if (message.getAuthor().isBot())
         {
             return;
         }
         
-        if (!message.isFromType(ChannelType.PRIVATE))
+        for (String identifier : Gob.IDENTIFIERS)
         {
-            for (String identifier : Gob.IDENTIFIERS)
+            if (msg.startsWith(identifier))
             {
-                if (msg.startsWith(identifier))
-                {
-                    command(msg.substring(identifier.length()), message);
-                    return;
-                }
-            }
-            
-            if (msg.startsWith(mention))
-            {
-                command(msg.substring(mention.length()), message);
+                command(msg.substring(identifier.length()), message);
+                return;
             }
         }
-        else 
+        
+        if (msg.startsWith(mention))
+        {
+            command(msg.substring(mention.length()), message);
+        }
+        
+        if (message.isFromType(ChannelType.PRIVATE))
         {
             command(msg, message);
         }
@@ -76,12 +74,6 @@ public class CommandEvaluator
             "%s#%s in %s sent: %s",
             user.getName(), user.getDiscriminator(), Text.formatGuildChannel(message), content
         ));
-    }
-    
-    // If true, avoid evaluating the command.
-    private boolean isSelfInvoke(Message message)
-    {
-        return (message.getAuthor().getId().equalsIgnoreCase(id));
     }
     
     public static class CommandParser
