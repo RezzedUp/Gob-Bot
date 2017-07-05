@@ -4,8 +4,8 @@ import com.michaelwflaherty.cleverbotapi.CleverBotQuery;
 import com.rezzedup.gob.Emoji;
 import com.rezzedup.gob.Gob;
 import com.rezzedup.gob.core.Command;
+import com.rezzedup.gob.core.Context;
 import com.rezzedup.gob.util.Text;
-import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.entities.MessageChannel;
 
 import java.util.ArrayList;
@@ -28,7 +28,7 @@ public class CleverBotCommand extends Command
     public CleverBotCommand(String key)
     {
         super("clever", "cleverbot", Emoji.CL, Emoji.ROBOT);
-        setDescrption("Have a conversation with CleverBot.");
+        setDescription("Have a conversation with CleverBot.");
         
         this.key = key;
     
@@ -45,30 +45,29 @@ public class CleverBotCommand extends Command
     }
     
     @Override
-    public void execute(String[] args, Message message)
+    public void execute(Context context)
     {
-        MessageChannel channel = message.getChannel();
-        String id = Text.formatGuildChannel(message);
+        MessageChannel channel = context.message.getChannel();
+        
+        String id = Text.formatGuildChannel(context.message);
+        String phrase = String.join(" ", context.arguments);
+        
+        if (!context.isEmoji())
+        {
+            channel.sendMessage("http://i.imgur.com/xqBK7xW.gifv").queue();
+        }
+        
         CleverBotSession session = sessions.get(id);
-        String phrase = String.join(" ", args);
         CleverBotQuery query = null;
         
         if (session == null || session.isExpired())
         {
-            try
-            {
-                channel.sendMessage("Starting a new **CleverBot** session!").queue();
-    
-                query = new CleverBotQuery(this.key, phrase);
-                session = new CleverBotSession(query);
-    
-                sessions.put(id, session);
-            }
-            catch (Exception e)
-            {
-                e.printStackTrace();
-                return;
-            }
+            channel.sendMessage("Starting a new **CleverBot** session!").queue();
+
+            query = new CleverBotQuery(this.key, phrase);
+            session = new CleverBotSession(query);
+
+            sessions.put(id, session);
         }
         else 
         {
@@ -79,16 +78,6 @@ public class CleverBotCommand extends Command
         try
         {
             query.sendRequest();
-            
-            Gob.status
-            (
-                "\n--- [CleverBot] ---\n" +
-                " Phrase:          '" + query.getPhrase() +  "'\n" +
-                " Response:        '" + query.getResponse() + "'\n" +
-                " Conversation-ID: '" + query.getConversationID() + "'\n" +
-                "--- [CleverBot] ---"
-            );
-            
             channel.sendMessage(query.getResponse()).queue();
         }
         catch (Exception e)

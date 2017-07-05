@@ -1,31 +1,41 @@
 package com.rezzedup.gob.core;
 
-import net.dv8tion.jda.core.entities.Message;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
-public abstract class Command
+public abstract class Command implements Executable
 {
-    protected final String[] aliases;
-    protected String descrption = "";
+    protected final List<String> aliases;
+    protected String description = "";
     
     public Command(String ... aliases)
     {
-        this.aliases = aliases;
+        if (aliases == null || aliases.length <= 0)
+        {
+            throw new IllegalArgumentException("Invalid aliases: empty or null");
+        }
+        
+        this.aliases = Arrays.stream(aliases).map(String::toLowerCase).collect(Collectors.toList());
     }
     
-    public final String[] getAliases()
+    public final String getName()
+    {
+        return aliases.get(0);
+    }
+    
+    public final List<String> getAliases()
     {
         return aliases;
     }
     
-    protected final void setDescrption(String descrption)
+    protected final void setDescription(String description)
     {
-        this.descrption = descrption;
+        this.description = description;
     }
     
-    public final String getDescrption()
+    public final String getDescription()
     {
-        return descrption;
+        return description;
     }
-    
-    public abstract void execute(String[] args, Message message);
 }

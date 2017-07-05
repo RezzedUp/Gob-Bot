@@ -1,52 +1,51 @@
 package com.rezzedup.gob.commands;
 
-import com.rezzedup.gob.core.CommandEvaluator;
 import com.rezzedup.gob.Emoji;
 import com.rezzedup.gob.core.Command;
+import com.rezzedup.gob.core.CommandEvaluator;
+import com.rezzedup.gob.core.Context;
 import com.rezzedup.gob.util.Text;
-
-import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.entities.MessageChannel;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class HelpCommand extends Command
 {
-    private final CommandEvaluator.CommandParser parser;
+    private final CommandEvaluator.CommandRegistry parser;
     
-    public HelpCommand(CommandEvaluator.CommandParser parser)
+    public HelpCommand(CommandEvaluator.CommandRegistry parser)
     {
         super("help", "?", Emoji.QUESTION);
-        setDescrption("Displays all usable commands.");
+        setDescription("Displays all usable commands.");
         this.parser = parser;
     }
     
     @Override
-    public void execute(String[] args, Message message)
+    public void execute(Context context)
     {
-        MessageChannel channel = message.getChannel();
+        MessageChannel channel = context.message.getChannel();
         List<String> msg = new ArrayList<>();
         
         for (Command command : parser.getRegisteredCommands())
         {
-            String[] aliases = command.getAliases();
-            String entry = "__" + aliases[0] + "__ - ";
+            String entry = "__" + command.getName() + "__ - ";
             
-            if (command.getDescrption().isEmpty())
+            if (command.getDescription().isEmpty())
             {
                 entry += "`No description.`";
             }
             else 
             {
-                entry += "`" + command.getDescrption() + "`";
+                entry += "`" + command.getDescription() + "`";
             }
             
-            if (aliases.length >= 2)
+            List<String> aliases = command.getAliases();
+            
+            if (aliases.size() >= 2)
             {
                 entry += " **Aliases:** ";
-                entry += String.join(", ", Arrays.copyOfRange(aliases, 1, aliases.length));
+                entry += String.join(", ", aliases.subList(1, aliases.size()));
             }
             
             msg.add(entry);

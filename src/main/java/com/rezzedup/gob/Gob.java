@@ -111,11 +111,11 @@ public class Gob extends ListenerAdapter
         
         jda.addEventListener(this);
         
-        CommandEvaluator.CommandParser parser = command.getCommandParser();
+        CommandEvaluator.CommandRegistry registry = command.getCommandParser();
         
-        parser.register(new HelpCommand(parser));
-        parser.register(new InfoCommand());
-        parser.register(new MathCommand());
+        registry.register(new HelpCommand(registry));
+        registry.register(new InfoCommand());
+        registry.register(new MathCommand());
     
         status("\n\n\n\n --- Gob --- \n Ready to go! \n\n\n");
     

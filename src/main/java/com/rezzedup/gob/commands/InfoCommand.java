@@ -1,19 +1,19 @@
 package com.rezzedup.gob.commands;
 
 import com.rezzedup.gob.core.Command;
+import com.rezzedup.gob.core.Context;
 import com.rezzedup.gob.util.Text;
-import net.dv8tion.jda.core.entities.Message;
 
 public class InfoCommand extends Command
 {
     public InfoCommand()
     {
         super("info", "about");
-        setDescrption("Displays information about Gob-bot.");
+        setDescription("Displays information about Gob-bot.");
     }
     
     @Override
-    public void execute(String[] args, Message message)
+    public void execute(Context context)
     {
         String send = Text.formattedResponse
         (
@@ -22,6 +22,6 @@ public class InfoCommand extends Command
             "GitHub repository: <https://github.com/RezzedUp/Gob-Bot>",
             "Uses __JDA__: <https://github.com/DV8FromTheWorld/JDA>"
         );
-        message.getChannel().sendMessage(send).queue();
+        context.message.getChannel().sendMessage(send).queue();
     }
 }

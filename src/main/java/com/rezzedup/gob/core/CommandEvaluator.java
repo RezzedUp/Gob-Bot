@@ -10,12 +10,14 @@ import net.dv8tion.jda.core.entities.User;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 public class CommandEvaluator
 {
-    private final CommandParser parser = new CommandParser();
+    private final CommandRegistry registry = new CommandRegistry();
     private final String id;
     private final String mention;
     
@@ -25,14 +27,14 @@ public class CommandEvaluator
         this.mention = jda.getSelfUser().getAsMention();
     }
     
-    public CommandParser getCommandParser()
+    public CommandRegistry getCommandParser()
     {
-        return parser;
+        return registry;
     }
     
     public void evaluate(Message message)
     {
-        String msg = message.getContent();
+        final String content = message.getContent();
         
         if (message.getAuthor().isBot())
         {
@@ -41,29 +43,39 @@ public class CommandEvaluator
         
         for (String identifier : Gob.IDENTIFIERS)
         {
-            if (msg.startsWith(identifier))
+            if (content.startsWith(identifier))
             {
-                command(msg.substring(identifier.length()), message);
+                command(message, content.substring(identifier.length()));
                 return;
             }
         }
         
-        if (msg.startsWith(mention))
+        if (content.startsWith(mention))
         {
-            command(msg.substring(mention.length()), message);
+            command(message, content.substring(mention.length()));
         }
         
         if (message.isFromType(ChannelType.PRIVATE))
         {
-            command(msg, message);
+            command(message, content);
         }
     }
     
-    private void command(String content, Message message)
+    private void command(Message message, String content)
     {
         String command = content.trim();
+        
         log(message, command);
-        parser.parse(command, message).execute();
+    
+        List<String> parts = Arrays.asList(command.split(" "));
+    
+        String name = parts.get(0);
+    
+        List<String> args = (parts.size() > 1)
+            ? Collections.unmodifiableList(parts.subList(1, parts.size()))
+            : Collections.emptyList();
+        
+        registry.getCommand(command).execute(new Context(message, name, args));
     }
     
     private void log(Message message, String content)
@@ -76,53 +88,37 @@ public class CommandEvaluator
         ));
     }
     
-    public static class CommandParser
+    public static class CommandRegistry
     {
-        // First alias -> Command
+        private final UnknownCommand unknown = new UnknownCommand();
+        
+        // Name (first alias) -> Command
         private final Map<String, Command> commands = new LinkedHashMap<>();
         
-        // First alias -> All aliases
-        private final Map<String, String[]> aliases = new LinkedHashMap<>();
+        // Alias -> Command
+        private final Map<String, Command> aliases = new LinkedHashMap<>();
         
-        public Executable parse(String command, Message message)
+        public Command getCommand(String command)
         {
-            String[] parts = command.split(" ");
-            String[] args = Arrays.copyOfRange(parts, 1, parts.length);
-            
-            if (commands.containsKey(parts[0]))
-            {
-                return new CommandExecutor(commands.get(parts[0]), args, message);
-            }
-            
-            for (String cmd : commands.keySet())
-            {
-                boolean root = true;
-                
-                for (String alias : aliases.get(cmd))
-                {
-                    // Already checked first alias: avoids rechecking.
-                    if (root)
-                    {
-                        root = false;
-                        continue;
-                    }
-                    
-                    if (parts[0].equalsIgnoreCase(alias))
-                    {
-                        return new CommandExecutor(commands.get(cmd), args, message);
-                    }
-                }
-            }
-            
-            return new UnknownCommandExecutor(message);
+            Command cmd = aliases.get(command.toLowerCase());
+            return (cmd != null) ? cmd : unknown;
         }
         
         public void register(Command command)
         {
-            String cmd = command.getAliases()[0];
+            String name = command.getName().toLowerCase();
             
-            commands.put(cmd, command);
-            aliases.put(cmd, command.getAliases());
+            if (commands.containsKey(name))
+            {
+                throw new IllegalStateException("A command by the name '" + name + "' already exists.");
+            }
+            
+            commands.put(name, command);
+            
+            for (String alias : command.getAliases())
+            {
+                aliases.put(alias.toLowerCase(), command);
+            }
         }
         
         public Collection<Command> getRegisteredCommands()
