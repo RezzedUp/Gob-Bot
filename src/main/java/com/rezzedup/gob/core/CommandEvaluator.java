@@ -1,5 +1,6 @@
 package com.rezzedup.gob.core;
 
+import com.rezzedup.gob.Emoji;
 import com.rezzedup.gob.Gob;
 import com.rezzedup.gob.util.Text;
 
@@ -91,7 +92,13 @@ public class CommandEvaluator
     
     public static class Registry
     {
-        private final UnknownCommand unknown = new UnknownCommand();
+        private final Executable unknown = (context) ->
+        {
+            if (context.message.isFromType(ChannelType.PRIVATE))
+            {
+                context.message.getChannel().sendMessage("I don't understand that command. " + Emoji.CRY).queue();
+            }
+        };
         
         // Name (first alias) -> Command
         private final Map<String, Command> commands = new LinkedHashMap<>();
@@ -99,7 +106,7 @@ public class CommandEvaluator
         // Alias -> Command
         private final Map<String, Command> aliases = new HashMap<>();
         
-        public Command get(String command)
+        public Executable get(String command)
         {
             Command cmd = aliases.get(command.toLowerCase());
             return (cmd != null) ? cmd : unknown;
