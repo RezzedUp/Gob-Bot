@@ -11,13 +11,14 @@ import net.dv8tion.jda.core.entities.User;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 public class CommandEvaluator
 {
-    private final CommandRegistry registry = new CommandRegistry();
+    private final Registry registry = new Registry();
     private final String id;
     private final String mention;
     
@@ -27,7 +28,7 @@ public class CommandEvaluator
         this.mention = jda.getSelfUser().getAsMention();
     }
     
-    public CommandRegistry getCommandParser()
+    public Registry getCommandRegistry()
     {
         return registry;
     }
@@ -63,19 +64,19 @@ public class CommandEvaluator
     
     private void command(Message message, String content)
     {
-        String command = content.trim();
+        String raw = content.trim();
         
-        log(message, command);
+        log(message, raw);
     
-        List<String> parts = Arrays.asList(command.split(" "));
+        List<String> parts = Arrays.asList(raw.split(" "));
     
-        String name = parts.get(0);
+        String command = parts.get(0);
     
         List<String> args = (parts.size() > 1)
             ? Collections.unmodifiableList(parts.subList(1, parts.size()))
             : Collections.emptyList();
         
-        registry.getCommand(command).execute(new Context(message, name, args));
+        registry.get(command).execute(new Context(message, command, args));
     }
     
     private void log(Message message, String content)
@@ -88,7 +89,7 @@ public class CommandEvaluator
         ));
     }
     
-    public static class CommandRegistry
+    public static class Registry
     {
         private final UnknownCommand unknown = new UnknownCommand();
         
@@ -96,9 +97,9 @@ public class CommandEvaluator
         private final Map<String, Command> commands = new LinkedHashMap<>();
         
         // Alias -> Command
-        private final Map<String, Command> aliases = new LinkedHashMap<>();
+        private final Map<String, Command> aliases = new HashMap<>();
         
-        public Command getCommand(String command)
+        public Command get(String command)
         {
             Command cmd = aliases.get(command.toLowerCase());
             return (cmd != null) ? cmd : unknown;

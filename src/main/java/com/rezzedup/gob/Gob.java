@@ -111,7 +111,7 @@ public class Gob extends ListenerAdapter
         
         jda.addEventListener(this);
         
-        CommandEvaluator.CommandRegistry registry = command.getCommandParser();
+        CommandEvaluator.Registry registry = command.getCommandRegistry();
         
         registry.register(new HelpCommand(registry));
         registry.register(new InfoCommand());
@@ -138,7 +138,7 @@ public class Gob extends ListenerAdapter
     
     public void setCleverBotApiKey(String key)
     {
-        this.command.getCommandParser().register(new CleverBotCommand(key));
+        this.command.getCommandRegistry().register(new CleverBotCommand(key));
     }
     
     @Override

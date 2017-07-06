@@ -12,9 +12,9 @@ import java.util.List;
 
 public class HelpCommand extends Command
 {
-    private final CommandEvaluator.CommandRegistry parser;
+    private final CommandEvaluator.Registry parser;
     
-    public HelpCommand(CommandEvaluator.CommandRegistry parser)
+    public HelpCommand(CommandEvaluator.Registry parser)
     {
         super("help", "?", Emoji.QUESTION);
         setDescription("Displays all usable commands.");
