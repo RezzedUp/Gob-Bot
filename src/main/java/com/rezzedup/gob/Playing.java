@@ -1,7 +1,6 @@
 package com.rezzedup.gob;
 
 import net.dv8tion.jda.core.entities.Game;
-import net.dv8tion.jda.core.entities.impl.GameImpl;
 
 public enum Playing
 {
@@ -10,21 +9,16 @@ public enum Playing
     GOBLIN_ROBOT_HELLO(Emoji.JAPANESE_GOBLIN + " " + Emoji.ROBOT + " hello"),
     GOBLIN_EQUALS_MATH(Emoji.JAPANESE_GOBLIN + " = 1 + 1");
     
-    private final String status;
+    private final Game game;
     
-    Playing(String status)
+    Playing(String value)
     {
-        this.status = status;
-    }
-    
-    public String getStatus()
-    {
-        return this.status;
+        this.game = Game.of(value);
     }
     
     public Game getGame()
     {
-        return new GameImpl(status, "", Game.GameType.DEFAULT);
+        return this.game;
     }
     
     public Playing next()

@@ -52,7 +52,7 @@ public class Response extends EmbedBuilder
     
     public Response sendPrivately()
     {
-        sender.getPrivateChannel().sendMessage(build()).queue();
+        sender.openPrivateChannel().queue(channel -> channel.sendMessage(build()).queue());
         return this;
     }
 }
