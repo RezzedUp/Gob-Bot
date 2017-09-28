@@ -7,7 +7,7 @@
     <groupId>com.rezzedup</groupId>
     <artifactId>gob</artifactId>
     <name>Gob</name>
-    <version>1.3.0</version>
+    <version>1.3.1</version>
     <packaging>jar</packaging>
 
     <repositories>
@@ -29,7 +29,7 @@
         <dependency>
             <groupId>net.dv8tion</groupId>
             <artifactId>JDA</artifactId>
-            <version>3.1.0_204</version>
+            <version>3.3.0_260</version>
         </dependency>
         <!-- 
         CleverBotApi-Java
