@@ -36,7 +36,7 @@ public class CommandEvaluator
     
     public void evaluate(Message message)
     {
-        final String content = message.getContent();
+        final String content = message.getContentRaw();
         
         if (message.getAuthor().isBot())
         {

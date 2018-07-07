@@ -7,7 +7,6 @@ import net.dv8tion.jda.core.AccountType;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.JDABuilder;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
-import net.dv8tion.jda.core.exceptions.RateLimitedException;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
 
 import javax.security.auth.login.LoginException;
@@ -27,6 +26,8 @@ public class Gob extends ListenerAdapter
     
     public static void main(String[] args)
     {
+        var thing = "hi";
+        
         if (args.length <= 0)
         {
             status("Expected bot's authentication token as the first argument.");
@@ -39,7 +40,7 @@ public class Gob extends ListenerAdapter
         {
             jda = new JDABuilder(AccountType.BOT).setToken(args[0]).buildBlocking();
         }
-        catch (LoginException | InterruptedException | RateLimitedException e)
+        catch (LoginException | InterruptedException e)
         {
             status("Unable to log in.");
             e.printStackTrace();

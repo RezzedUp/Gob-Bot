@@ -13,7 +13,7 @@ public enum Playing
     
     Playing(String value)
     {
-        this.game = Game.of(value);
+        this.game = Game.of(Game.GameType.DEFAULT, value);
     }
     
     public Game getGame()
