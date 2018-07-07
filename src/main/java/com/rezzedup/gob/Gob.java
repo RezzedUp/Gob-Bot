@@ -1,9 +1,7 @@
 package com.rezzedup.gob;
 
-import com.rezzedup.gob.commands.CleverBotCommand;
 import com.rezzedup.gob.commands.HelpCommand;
 import com.rezzedup.gob.commands.InfoCommand;
-import com.rezzedup.gob.commands.MathCommand;
 import com.rezzedup.gob.core.CommandEvaluator;
 import net.dv8tion.jda.core.AccountType;
 import net.dv8tion.jda.core.JDA;
@@ -47,17 +45,12 @@ public class Gob extends ListenerAdapter
             e.printStackTrace();
             return;
         }
-        if (jda == null)
-        {
-            status("JDA instance is null.");
-            return;
-        }
         
         Gob gob = new Gob(jda);
         
         if (args.length >= 2)
         {
-            gob.setCleverBotApiKey(args[1]);
+            //gob.setCleverBotApiKey(args[1]);
         }
         else 
         {
@@ -115,7 +108,6 @@ public class Gob extends ListenerAdapter
         
         registry.register(new HelpCommand(registry));
         registry.register(new InfoCommand());
-        registry.register(new MathCommand());
     
         status("\n\n\n\n --- Gob --- \n Ready to go! \n\n\n");
     
@@ -134,11 +126,6 @@ public class Gob extends ListenerAdapter
         long seconds = 30L * 1000L;
         
         timer.schedule(scrollStatus, 0L, seconds);
-    }
-    
-    public void setCleverBotApiKey(String key)
-    {
-        this.command.getCommandRegistry().register(new CleverBotCommand(key));
     }
     
     @Override
