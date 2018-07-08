@@ -1,8 +1,10 @@
 package com.rezzedup.gob;
 
-import com.rezzedup.gob.commands.definitions.HelpCommand;
-import com.rezzedup.gob.commands.definitions.InfoCommand;
-import com.rezzedup.gob.commands.CommandEvaluator;
+import com.rezzedup.gob.commands.Argument;
+import com.rezzedup.gob.commands.ArgumentStack;
+import com.rezzedup.gob.commands.OptionProcessor;
+import com.rezzedup.gob.commands.Flag;
+import com.rezzedup.gob.commands.OptionValues;
 import net.dv8tion.jda.core.AccountType;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.JDABuilder;
@@ -12,9 +14,16 @@ import net.dv8tion.jda.core.hooks.ListenerAdapter;
 import javax.security.auth.login.LoginException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 public class Gob extends ListenerAdapter
 {
+    public static final OptionProcessor SETUP_OPTIONS = 
+        OptionProcessor.using(Flag.SETTING.called("-d", "--discord", "--discord-token"))
+            .and(Flag.QUERY.called("-?", "-h", "--help"))
+            .and(Flag.SETTING.called("-y", "--yandex", "--yandex-token"))
+        .build();
+    
     private static boolean active = true;
     
     public static final String[] IDENTIFIERS = 
@@ -22,11 +31,22 @@ public class Gob extends ListenerAdapter
         Emoji.JAPANESE_GOBLIN, ":gob:", ":gob", "gob:", "gob ", "gobbledygook"
     };
     
-    public static void main(String[] args)
+    public static void main(String[] input)
     {
-        if (args.length <= 0)
+        ArgumentStack args = new ArgumentStack(List.of(input));
+        OptionValues options = SETUP_OPTIONS.processOptions(args);
+        
+        if (options.hasQuery("--help"))
         {
-            status("Expected bot's authentication token as the first argument.");
+            // TODO: display help
+            return;
+        }
+    
+        Argument discordToken = options.getSetting("--discord");
+        
+        if (!discordToken.exists())
+        {
+            status("Missing bot's discord token (--discord <token>)");
             return;
         }
         
@@ -34,7 +54,7 @@ public class Gob extends ListenerAdapter
     
         try
         {
-            jda = new JDABuilder(AccountType.BOT).setToken(args[0]).buildBlocking();
+            jda = new JDABuilder(AccountType.BOT).setToken(discordToken.asText()).buildBlocking();
         }
         catch (LoginException | InterruptedException e)
         {
@@ -82,18 +102,10 @@ public class Gob extends ListenerAdapter
         System.exit(0);
     }
     
-    private final CommandEvaluator command;
-    
     public Gob(JDA jda)
     {
-        this.command = new CommandEvaluator(jda);
         
         jda.addEventListener(this);
-        
-        CommandEvaluator.Registry registry = command.getCommandRegistry();
-        
-        registry.register(new HelpCommand(registry));
-        registry.register(new InfoCommand());
     
         status("\n\n\n\n --- Gob --- \n Ready to go! \n\n\n");
     }
@@ -101,6 +113,6 @@ public class Gob extends ListenerAdapter
     @Override
     public void onMessageReceived(MessageReceivedEvent event)
     {
-        command.evaluate(event.getMessage());
+        //command.evaluate(event.getMessage());
     }
 }
