@@ -1,8 +1,8 @@
 package com.rezzedup.gob;
 
-import com.rezzedup.gob.commands.HelpCommand;
-import com.rezzedup.gob.commands.InfoCommand;
-import com.rezzedup.gob.core.CommandEvaluator;
+import com.rezzedup.gob.commands.definitions.HelpCommand;
+import com.rezzedup.gob.commands.definitions.InfoCommand;
+import com.rezzedup.gob.commands.CommandEvaluator;
 import net.dv8tion.jda.core.AccountType;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.JDABuilder;
@@ -12,8 +12,6 @@ import net.dv8tion.jda.core.hooks.ListenerAdapter;
 import javax.security.auth.login.LoginException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Timer;
-import java.util.TimerTask;
 
 public class Gob extends ListenerAdapter
 {
@@ -21,19 +19,17 @@ public class Gob extends ListenerAdapter
     
     public static final String[] IDENTIFIERS = 
     {
-        Emoji.JAPANESE_GOBLIN, ":gob:", ":gob", "gob:", "gob "
+        Emoji.JAPANESE_GOBLIN, ":gob:", ":gob", "gob:", "gob ", "gobbledygook"
     };
     
     public static void main(String[] args)
     {
-        var thing = "hi";
-        
         if (args.length <= 0)
         {
             status("Expected bot's authentication token as the first argument.");
             return;
         }
-    
+        
         JDA jda;
     
         try
@@ -48,16 +44,7 @@ public class Gob extends ListenerAdapter
         }
         
         Gob gob = new Gob(jda);
-        
-        if (args.length >= 2)
-        {
-            //gob.setCleverBotApiKey(args[1]);
-        }
-        else 
-        {
-            status("CleverBot features won't be enabled: expected CleverBot API Key as second argument.");
-        }
-        
+
         Runtime.getRuntime().addShutdownHook(new Thread(() ->
         {
             System.out.println("Gob: Bye!");
@@ -97,8 +84,6 @@ public class Gob extends ListenerAdapter
     
     private final CommandEvaluator command;
     
-    private final Timer timer = new Timer();
-    
     public Gob(JDA jda)
     {
         this.command = new CommandEvaluator(jda);
@@ -111,22 +96,6 @@ public class Gob extends ListenerAdapter
         registry.register(new InfoCommand());
     
         status("\n\n\n\n --- Gob --- \n Ready to go! \n\n\n");
-    
-        TimerTask scrollStatus = new TimerTask() 
-        {
-            private Playing status = Playing.COLON_GOB_HELP;
-            
-            @Override
-            public void run()
-            {
-                jda.getPresence().setGame(status.getGame());
-                status = status.next();
-            }
-        };
-    
-        long seconds = 30L * 1000L;
-        
-        timer.schedule(scrollStatus, 0L, seconds);
     }
     
     @Override

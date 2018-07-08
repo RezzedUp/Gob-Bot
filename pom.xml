@@ -76,17 +76,6 @@
                         <goals>
                             <goal>shade</goal>
                         </goals>
-                        <configuration>
-                            <filters>
-                                <filter>
-                                    <artifact>net.dv8tion:JDA</artifact>
-                                    <excludes>
-                                        <exclude>natives/**</exclude>
-                                        <exclude>net/dv8tion/jda/core/audio/**</exclude>
-                                    </excludes>
-                                </filter>
-                            </filters>
-                        </configuration>
                     </execution>
                 </executions>
             </plugin>

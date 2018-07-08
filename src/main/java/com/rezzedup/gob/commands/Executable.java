@@ -1,4 +1,4 @@
-package com.rezzedup.gob.core;
+package com.rezzedup.gob.commands;
 
 @FunctionalInterface
 public interface Executable

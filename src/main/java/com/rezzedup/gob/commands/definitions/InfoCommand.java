@@ -1,7 +1,7 @@
-package com.rezzedup.gob.commands;
+package com.rezzedup.gob.commands.definitions;
 
-import com.rezzedup.gob.core.Command;
-import com.rezzedup.gob.core.Context;
+import com.rezzedup.gob.commands.Command;
+import com.rezzedup.gob.commands.Context;
 import com.rezzedup.gob.util.Text;
 
 public class InfoCommand extends Command

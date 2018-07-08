@@ -1,4 +1,4 @@
-package com.rezzedup.gob.core;
+package com.rezzedup.gob.commands;
 
 import com.rezzedup.gob.Emoji;
 import net.dv8tion.jda.core.entities.Message;

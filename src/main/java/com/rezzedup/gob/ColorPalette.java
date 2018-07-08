@@ -15,7 +15,7 @@ public enum ColorPalette
     private final String hex;
     private final Color color;
     
-    private ColorPalette(String hex)
+    ColorPalette(String hex)
     {
         this.hex = hex;
         this.color = Color.decode(hex);

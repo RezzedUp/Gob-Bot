@@ -1,4 +1,4 @@
-package com.rezzedup.gob.core;
+package com.rezzedup.gob.commands;
 
 import java.util.Arrays;
 import java.util.List;
